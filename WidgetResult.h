@@ -20,6 +20,7 @@ class WidgetResult : public QObject
         virtual void setValue(const QVariant&);
         virtual void click(const int x, const int y);
         virtual void click();
+        virtual void hover(const int x, const int y);
         virtual void submit();
     protected:
         void sendEvent(QEvent* e);

@@ -6,7 +6,7 @@
 #include <QWidget>
 #include <QString>
 #include <QThread>
-class TestingModule: public QThread
+class TestingModule: public QObject
 {
         Q_OBJECT
     public:
@@ -18,7 +18,7 @@ class TestingModule: public QThread
             return app_.isNull()?nullptr:app_;
         }
     public slots:
-        void start(Priority priority = InheritPriority);
+        void start();
         void clickWidgetByName(const QString& name);
     // Signals that can be delegated over to the listener
     protected:

@@ -24,8 +24,9 @@ void WidgetResult::setValue(const QVariant&)
 
 void WidgetResult::click(const int x, const int y)
 {
-    RETURN_IF_INVALID()
+    RETURN_IF_INVALID();
     //QTest::mouseClick(target_, Qt::LeftButton, Qt::NoModifier, QPoint(x, y), 100);
+    hover(x, y);
     sendMouseEvent(QEvent::MouseButtonPress, x, y, Qt::LeftButton);
     sendMouseEvent(QEvent::MouseButtonRelease, x, y, Qt::LeftButton);
 }
@@ -36,6 +37,13 @@ void WidgetResult::click()
     const int x = target_->width()/2;
     const int y = target_->height()/2;
     click(x, y);
+}
+
+void WidgetResult::hover(const int x, const int y)
+{
+    //sendMouseEvent(QEvent::MouseMove, x, y, Qt::NoButton);
+    QHoverEvent* eve = new QHoverEvent( QEvent::HoverEnter, QPoint(x,y), QPoint(x,y));
+    sendEvent(eve);
 }
 
 void WidgetResult::submit()
