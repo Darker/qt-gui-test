@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+class QAction;
 
 namespace Ui {
     class MainWindow;
@@ -18,6 +19,9 @@ class MainWindow : public QMainWindow
         void clickWidget(const QString& name);
         void clickWidget();
         void actionClicked();
+        void menuClicked(QAction*);
+        void showDialog();
+        void fileDialog();
     signals:
         clickWidgetRequest(const QString&);
     private:

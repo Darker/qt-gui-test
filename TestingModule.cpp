@@ -1,8 +1,5 @@
 #include "TestingModule.h"
-#include "WidgetResult.h"
-#include <QLabel>
-#include <QAbstractButton>
-#include <QMenu>
+#include "SearchResult.h"
 
 
 TestingModule::TestingModule(QApplication* app) :
@@ -23,28 +20,28 @@ QWidget* TestingModule::byName(const QString& name)
     return ret;
 }
 
-QWidget* TestingModule::byText(const QString& text)
+SearchResultPtr TestingModule::byText(const QString& text)
 {
-    QWidget* ret = nullptr;
+    SearchResultPtr ret = nullptr;
     for(QWidget* widget: QApplication::allWidgets()) {
-       if(widget->accessibleName().indexOf(text)!=-1 ||
-          widget->accessibleDescription().indexOf(text)!=-1) {
-           ret = widget;
+       SearchResultPtr tmp = SearchResult::Factory::fromObject(widget, this);
+       if(tmp->getGUIText().indexOf(text) != -1) {
+           ret = tmp;
+           break;
        }
-       if(QLabel* label = qobject_cast<QLabel *>(widget)) {
-           if(label->text().indexOf(text) != -1)
-               ret = widget;
+       // search widget's children who are not QWidgets themselves
+       const QObjectList& childlist = widget->children();
+       for( int i=0,l=childlist.size(); i<l; i++ ) {
+           const QObject* entry = childlist[i];
+           if(!entry->isWidgetType()) {
+               SearchResultPtr tmp = SearchResult::Factory::fromObject(widget, this);
+               if(tmp->getGUIText().indexOf(text) != -1) {
+                   ret = tmp;
+                   break;
+               }
+           }
        }
-       else if(QAbstractButton* button = qobject_cast<QAbstractButton *>(widget))
-       {
-           if(button->text().indexOf(text) != -1)
-               ret = widget;
-       }
-       else if(QMenu* menu = qobject_cast<QMenu*>(widget))
-       {
-           if(menu->title().indexOf(text) != -1)
-               ret = widget;
-       }
+
        if(ret!=nullptr)
            break;
     }
@@ -64,12 +61,29 @@ void TestingModule::start()
     //QThread::start(priority);
 }
 
-void TestingModule::clickWidgetByName(const QString& name)
+void TestingModule::command(const QString& name, const QString& paramstr)
 {
-    QWidget* w = byName(name);
-    if(w == nullptr)
-        w = byText(name);
-    WidgetResult* res = new WidgetResult(w, this);
+    QStringList params = paramstr.split("::");
+    if(params.length()==0)
+        return;
+    const QString selector = params[0];
+    SearchResultPtr res = nullptr;
+    {
+        QWidget* w = byName(selector);
+        if(w != nullptr) {
+            res = SearchResult::Factory::fromObject(w, this);
+        }
+    }
+    if(res == nullptr)
+        res = byText(selector);
     //sleep(1);
-    res->click();
+    if(res !=nullptr) {
+        if( name == "click" )
+            res->click();
+        else if (name=="submit")
+            res->submit();
+        else if (name=="value" && params.length()>=2) {
+            res->setValue(params[1]);
+        }
+    }
 }

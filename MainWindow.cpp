@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include <QDebug>
+#include <QAction>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -21,10 +22,29 @@ void MainWindow::clickWidget(const QString& name)
 
 void MainWindow::clickWidget()
 {
-    clickWidget(ui->lineEdit->text());
+    const QString text = ui->lineEdit->text();
+    ui->lineEdit->setText("");
+    clickWidget(text);
+    //ui->lineEdit->setText(text);
 }
 
 void MainWindow::actionClicked()
 {
     qDebug()<<"Clicked!";
+}
+
+void MainWindow::menuClicked(QAction* a)
+{
+    qDebug()<< "Clicked: "<<a->text();
+}
+#include <QMessageBox>
+void MainWindow::showDialog()
+{
+    QMessageBox::warning(this, "!!!", "U gon die.");
+}
+#include <QFileDialog>
+void MainWindow::fileDialog()
+{
+    QString ddd = QFileDialog::getExistingDirectory(this, "SHIT!");
+    qDebug()<<"Selected file: "<<ddd;
 }

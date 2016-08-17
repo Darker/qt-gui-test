@@ -1,32 +1,23 @@
 #ifndef WIDGETRESULT_H
 #define WIDGETRESULT_H
-
+#include "SearchResult.h"
 #include <QWidget>
-#include <QEvent>
-#include <QApplication>
-#include <QPointer>
-#include "TestingModule.h"
-
-class WidgetResult : public QObject
+class WidgetResult : public SearchResult
 {
         Q_OBJECT
     public:
         WidgetResult(QWidget*, TestingModule*);
 
-
-    signals:
-        clicked(const int x, const int y);
+        class Factory: public SearchResult::Factory {
+            public:
+                virtual SearchResultPtr newInstance( QObject*, TestingModule* ) const override;
+                virtual QString objectName() const override;
+        };
     public slots:
-        virtual void setValue(const QVariant&);
-        virtual void click(const int x, const int y);
-        virtual void click();
-        virtual void hover(const int x, const int y);
-        virtual void submit();
-    protected:
-        void sendEvent(QEvent* e);
-        void sendMouseEvent(QEvent::Type t, const int x, const int y, Qt::MouseButton button);
-        QPointer<QWidget> target_;
-        QPointer<QApplication> app_;
+        void click() override;
+        void click(const int x, const int y) override;
+    private:
+        QPointer<QWidget> targetWidget_;
 };
-
+typedef std::shared_ptr<WidgetResult> WidgetResultPtr;
 #endif // WIDGETRESULT_H

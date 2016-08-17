@@ -63,6 +63,32 @@
      <string>Du de deed</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>20</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Show dialog</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>30</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>File dialog</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -143,9 +169,60 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>menuBar</sender>
+   <signal>triggered(QAction*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>menuClicked(QAction*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>150</x>
+     <y>5</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>243</x>
+     <y>77</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>197</x>
+     <y>65</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>203</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_3</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>fileDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>284</x>
+     <y>77</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>338</x>
+     <y>110</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>clickWidget()</slot>
   <slot>actionClicked()</slot>
+  <slot>menuClicked(QAction*)</slot>
+  <slot>showDialog()</slot>
+  <slot>fileDialog()</slot>
  </slots>
 </ui>
