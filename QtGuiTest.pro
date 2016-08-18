@@ -15,8 +15,6 @@ TEMPLATE = app
 SOURCES += main.cpp\
         MainWindow.cpp \
     TestingModule.cpp \
-    WidgetResult.cpp \
-    SearchResult.cpp \
     register_shit.cpp \
     server/TestServer.cpp \
     server/SmartSocket.cpp \
@@ -27,8 +25,6 @@ SOURCES += main.cpp\
 
 HEADERS  += MainWindow.h \
     TestingModule.h \
-    WidgetResult.h \
-    SearchResult.h \
     register_shit.h \
     server/TestServer.h \
     server/SmartSocket.h \

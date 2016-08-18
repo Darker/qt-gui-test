@@ -6,6 +6,10 @@
 #include <QWidget>
 #include <QString>
 #include <QThread>
+#include <memory>
+class SearchResult;
+typedef std::shared_ptr<SearchResult> SearchResultPtr;
+
 class TestingModule: public QObject
 {
         Q_OBJECT

@@ -1,6 +1,6 @@
 #ifndef DIALOGRESULT_H
 #define DIALOGRESULT_H
-#include "../WidgetResult.h"
+#include "WidgetResult.h"
 #include <QDialog>
 class DialogResult : public WidgetResult
 {
