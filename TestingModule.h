@@ -6,7 +6,6 @@
 #include <QWidget>
 #include <QString>
 #include <QThread>
-#include "SearchResult.h"
 class TestingModule: public QObject
 {
         Q_OBJECT

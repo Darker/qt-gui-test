@@ -21,7 +21,9 @@ SOURCES += main.cpp\
     server/TestServer.cpp \
     server/SmartSocket.cpp \
     results/DialogResult.cpp \
-    results/FileDialogResult.cpp
+    results/FileDialogResult.cpp \
+    results/SearchResult.cpp \
+    results/WidgetResult.cpp
 
 HEADERS  += MainWindow.h \
     TestingModule.h \
@@ -31,6 +33,8 @@ HEADERS  += MainWindow.h \
     server/TestServer.h \
     server/SmartSocket.h \
     results/DialogResult.h \
-    results/FileDialogResult.h
+    results/FileDialogResult.h \
+    results/SearchResult.h \
+    results/WidgetResult.h
 
 FORMS    += MainWindow.ui

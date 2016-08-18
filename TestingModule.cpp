@@ -1,5 +1,5 @@
 #include "TestingModule.h"
-#include "SearchResult.h"
+#include "results/SearchResult.h"
 
 
 TestingModule::TestingModule(QApplication* app) :
