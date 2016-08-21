@@ -1,7 +1,7 @@
 #-------------------------------------------------
 #
 # Project created by QtCreator 2016-08-02T20:17:23
-#
+#d
 #-------------------------------------------------
 
 QT       += core gui testlib network
@@ -21,7 +21,10 @@ SOURCES += main.cpp\
     results/DialogResult.cpp \
     results/FileDialogResult.cpp \
     results/SearchResult.cpp \
-    results/WidgetResult.cpp
+    results/WidgetResult.cpp \
+    server/ANSI.cpp \
+    results/QMenuResult.cpp \
+    results/QActionResult.cpp
 
 HEADERS  += MainWindow.h \
     TestingModule.h \
@@ -31,6 +34,9 @@ HEADERS  += MainWindow.h \
     results/DialogResult.h \
     results/FileDialogResult.h \
     results/SearchResult.h \
-    results/WidgetResult.h
+    results/WidgetResult.h \
+    server/ANSI.h \
+    results/QMenuResult.h \
+    results/QActionResult.h
 
 FORMS    += MainWindow.ui

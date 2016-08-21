@@ -45,6 +45,6 @@ void MainWindow::showDialog()
 #include <QFileDialog>
 void MainWindow::fileDialog()
 {
-    QString ddd = QFileDialog::getExistingDirectory(this, "SHIT!");
+    QString ddd = QFileDialog::getExistingDirectory(this, "Select file or die!");
     qDebug()<<"Selected file: "<<ddd;
 }

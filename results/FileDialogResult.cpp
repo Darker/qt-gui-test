@@ -1,5 +1,6 @@
 #include "FileDialogResult.h"
 #include <QVariant>
+#include <QFileInfo>
 
 FileDialogResult::FileDialogResult(QFileDialog* dialog, TestingModule* module) :
     DialogResult(dialog, module)
@@ -12,16 +13,22 @@ FileDialogResult::FileDialogResult(QFileDialog* dialog, TestingModule* module) :
 void FileDialogResult::setValue(const QVariant& var)
 {
     if( var.canConvert<QString>() ) {
-        targetFileDialog_->setDirectory(var.toString());
+        QFileInfo info(var.toString());
+        QFileInfo parent(info.absoluteDir().canonicalPath());
+        if( parent.exists() ) {
+            targetFileDialog_->setDirectory(parent.canonicalFilePath());
+            targetFileDialog_->selectFile(info.fileName());
+            //QUrl asUrl(info.absoluteFilePath());
+            //targetFileDialog_->selectUrl(asUrl);
+        }
         // These two were added later, when it didn't work
         // but they didn't help in any way
-        targetFileDialog_->selectFile(var.toString());
-        QUrl asUrl(var.toString());
-        targetFileDialog_->selectUrl(asUrl);
 
-        QString directory = targetFileDialog_->directory().absolutePath();
-        qDebug()<<"New dir: "<<directory;
+
+
+        //QString directory = targetFileDialog_->directory().absolutePath();
+        //qDebug()<<"New dir: "<<directory;
         // Copied from QFileDialog::getExistingDirectory to check the real output
-        qDebug()<<"Selected: "<<targetFileDialog_->selectedUrls().value(0).toString();
+        //qDebug()<<"Selected: "<<targetFileDialog_->selectedUrls().value(0).toString();
     }
 }

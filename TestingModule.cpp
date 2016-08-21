@@ -23,7 +23,12 @@ QWidget* TestingModule::byName(const QString& name)
 SearchResultPtr TestingModule::byText(const QString& text)
 {
     SearchResultPtr ret = nullptr;
-    for(QWidget* widget: QApplication::allWidgets()) {
+    for (QWidget* top : app_->topLevelWidgets()) {
+       ret = byText(top, text);
+       if(ret != nullptr)
+           return ret;
+    }
+    /*for(QWidget* widget: QApplication::allWidgets()) {
        SearchResultPtr tmp = SearchResult::Factory::fromObject(widget, this);
        if(tmp->getGUIText().indexOf(text) != -1) {
            ret = tmp;
@@ -44,7 +49,7 @@ SearchResultPtr TestingModule::byText(const QString& text)
 
        if(ret!=nullptr)
            break;
-    }
+    }*/
     return ret;
 }
 
@@ -86,4 +91,22 @@ void TestingModule::command(const QString& name, const QString& paramstr)
             res->setValue(params[1]);
         }
     }
+}
+
+SearchResultPtr TestingModule::byText(QObject* parentObj, const QString& text)
+{
+    for(QObject* object: parentObj->children()) {
+        SearchResultPtr tmp = SearchResult::Factory::fromObject(object, this, true);
+        if(tmp == nullptr)
+            continue;
+        const QString otext = tmp->getGUIText();
+        const QString oname = object->objectName();
+
+        if(tmp->getGUIText().indexOf(text) != -1)
+            return tmp;
+        tmp = byText(object, text);
+        if(tmp!=nullptr)
+            return tmp;
+    }
+    return nullptr;
 }

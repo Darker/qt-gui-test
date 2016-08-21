@@ -2,14 +2,14 @@
 #include "results/WidgetResult.h"
 #include "results/DialogResult.h"
 #include "results/FileDialogResult.h"
+#include "results/QMenuResult.h"
+#include "results/QActionResult.h"
 #include <memory>
 void register_shit()
 {
     SearchResult::Factory::registerConstructor(std::make_shared<WidgetResult::Factory>());
-    SearchResult::Factory::registerConstructor(
-                std::make_shared<SearchResult::FactorySimple<DialogResult, QDialog>>()
-    );
-    SearchResult::Factory::registerConstructor(
-                std::make_shared<SearchResult::FactorySimple<FileDialogResult, QFileDialog>>()
-    );
+    SearchResult::Factory::registerConstructor<DialogResult, QDialog>();
+    SearchResult::Factory::registerConstructor<FileDialogResult, QFileDialog>();
+    SearchResult::Factory::registerConstructor<QMenuResult, QMenu>();
+    SearchResult::Factory::registerConstructor<QActionResult, QAction>();
 }

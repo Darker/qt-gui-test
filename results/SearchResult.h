@@ -20,8 +20,13 @@ class SearchResult : public QObject
         typedef std::shared_ptr<SearchResult> SearchResultPtr;
         class Factory {
             public:
-                static SearchResultPtr fromObject( QObject*, TestingModule* );
+                static SearchResultPtr fromObject( QObject*, TestingModule*, bool ignoreUnimplemented = false );
                 static void registerConstructor( const std::shared_ptr<SearchResult::Factory> factory );
+                template <class T_ResType, class T_QObjectType>
+                static void registerConstructor() {
+                    registerConstructor(std::make_shared<SearchResult::FactorySimple<T_ResType, T_QObjectType>>());
+                }
+
                 virtual SearchResultPtr newInstance( QObject*, TestingModule* ) const = 0;
                 virtual QString objectName() const = 0;
             protected:

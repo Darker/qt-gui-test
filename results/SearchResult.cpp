@@ -82,7 +82,7 @@ void SearchResult::sendMouseEvent(QEvent::Type t, const int x, const int y, Qt::
     sendEvent(eve);
 }
 
-std::shared_ptr<SearchResult> SearchResult::Factory::fromObject(QObject* widget, TestingModule* module)
+std::shared_ptr<SearchResult> SearchResult::Factory::fromObject(QObject* widget, TestingModule* module, bool ignoreUnimplemented)
 {
     std::shared_ptr<SearchResult> returnValue = nullptr;
     if(widget != nullptr) {
@@ -102,7 +102,7 @@ std::shared_ptr<SearchResult> SearchResult::Factory::fromObject(QObject* widget,
             className = meta->className();
         }
     }
-    if(returnValue == nullptr) {
+    if(returnValue == nullptr && !ignoreUnimplemented ) {
         returnValue = std::make_shared<SearchResult>(widget, module);
     }
     return returnValue;

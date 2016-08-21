@@ -27,6 +27,7 @@ class TestingModule: public QObject
     // Signals that can be delegated over to the listener
     protected:
         QPointer<QApplication> app_;
+        SearchResultPtr byText(QObject* obj, const QString&);
 };
 
 #endif // TESTINGMODULE_H
