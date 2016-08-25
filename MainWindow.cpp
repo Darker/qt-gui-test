@@ -37,6 +37,11 @@ void MainWindow::menuClicked(QAction* a)
 {
     qDebug()<< "Clicked: "<<a->text();
 }
+
+void MainWindow::treeItemDbl(QModelIndex i)
+{
+
+}
 #include <QMessageBox>
 void MainWindow::showDialog()
 {

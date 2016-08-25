@@ -13,6 +13,7 @@ class FileDialogResult : public DialogResult
 
     public slots:
         virtual void setValue(const QVariant&) override;
+        virtual void submit() override;
 };
 
 #endif // FILEDIALOGRESULT_H

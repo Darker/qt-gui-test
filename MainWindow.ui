@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>437</width>
+    <height>341</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>120</x>
-      <y>130</y>
+      <y>70</y>
       <width>113</width>
       <height>20</height>
      </rect>
@@ -40,8 +40,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>130</y>
+      <x>40</x>
+      <y>70</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -54,7 +54,7 @@
     <property name="geometry">
      <rect>
       <x>240</x>
-      <y>130</y>
+      <y>70</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -89,13 +89,43 @@
      <string>File dialog</string>
     </property>
    </widget>
+   <widget class="QTreeWidget" name="treeWidget">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>140</y>
+      <width>256</width>
+      <height>192</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>bl bl bl bl</string>
+     </property>
+    </column>
+    <item>
+     <property name="text">
+      <string>dsadsa</string>
+     </property>
+     <item>
+      <property name="text">
+       <string>dsadsadsa</string>
+      </property>
+     </item>
+    </item>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>437</width>
      <height>21</height>
     </rect>
    </property>
@@ -103,7 +133,15 @@
     <property name="title">
      <string>Click this shit</string>
     </property>
-    <addaction name="actionSuch_menu"/>
+    <widget class="QMenu" name="menuSuch_menu">
+     <property name="title">
+      <string>Such menu</string>
+     </property>
+     <addaction name="actionSubMenuItem"/>
+     <addaction name="separator"/>
+     <addaction name="actionI_hate_mondays"/>
+    </widget>
+    <addaction name="menuSuch_menu"/>
    </widget>
    <widget class="QMenu" name="menuMy_hands_are_typing_words">
     <property name="title">
@@ -123,14 +161,19 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="actionSuch_menu">
-   <property name="text">
-    <string>Such menu</string>
-   </property>
-  </action>
   <action name="actionCharacter_limits_and_brief_gui_descriptions_are_for_pussies">
    <property name="text">
     <string>Character limits and brief gui descriptions are for pussies.</string>
+   </property>
+  </action>
+  <action name="actionSubMenuItem">
+   <property name="text">
+    <string>SubMenuItem!</string>
+   </property>
+  </action>
+  <action name="actionI_hate_mondays">
+   <property name="text">
+    <string>I hate mondays</string>
    </property>
   </action>
  </widget>
@@ -145,7 +188,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>268</x>
-     <y>174</y>
+     <y>125</y>
     </hint>
     <hint type="destinationlabel">
      <x>271</x>
@@ -217,6 +260,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>treeWidget</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>treeItemDbl(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>192</x>
+     <y>257</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>394</x>
+     <y>261</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>clickWidget()</slot>
@@ -224,5 +283,6 @@
   <slot>menuClicked(QAction*)</slot>
   <slot>showDialog()</slot>
   <slot>fileDialog()</slot>
+  <slot>treeItemDbl(QModelIndex)</slot>
  </slots>
 </ui>

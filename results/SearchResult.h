@@ -53,8 +53,19 @@ class SearchResult : public QObject
         virtual void click(const int x, const int y);
         virtual void click();
         virtual void hover(const int x, const int y);
+        // Submits the data
+        // This is almost unique to dialogs
         virtual void submit();
+        // Returns text that the user uses to navigate to this item
+        // Should NOT return text of sub items. If no text is applicable
+        // shhould NOT return qobject name
         virtual QString getGUIText();
+        // Double clicks an item in the target
+        // This can be menu item, item in qlistwidget or combobox
+        virtual void doubleClickItem(const QString&);
+        // Selects one or more items by their visible string values
+        // If multi select isn't supported, only first item of list will be selected
+        virtual void selectItems(const QStringList&);
     protected:
         void sendEvent(QEvent* e);
         void sendMouseEvent(QEvent::Type t, const int x, const int y, Qt::MouseButton button);

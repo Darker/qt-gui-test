@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QModelIndex>
 class QAction;
 
 namespace Ui {
@@ -20,6 +21,7 @@ class MainWindow : public QMainWindow
         void clickWidget();
         void actionClicked();
         void menuClicked(QAction*);
+        void treeItemDbl(QModelIndex);
         void showDialog();
         void fileDialog();
     signals:

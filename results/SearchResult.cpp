@@ -67,6 +67,14 @@ QString SearchResult::getGUIText()
     return QString();
 }
 
+void SearchResult::doubleClickItem(const QString&) {}
+
+void SearchResult::selectItems(const QStringList&)
+{
+
+}
+
+
 void SearchResult::sendEvent(QEvent* e)
 {
     RETURN_IF_INVALID()
