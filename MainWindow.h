@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QModelIndex>
 class QAction;
-
+class QTreeWidgetItem;
 namespace Ui {
     class MainWindow;
 }
@@ -22,10 +22,11 @@ class MainWindow : public QMainWindow
         void actionClicked();
         void menuClicked(QAction*);
         void treeItemDbl(QModelIndex);
+        void treeItemDbl(QTreeWidgetItem*,int);
         void showDialog();
         void fileDialog();
     signals:
-        clickWidgetRequest(const QString&);
+        void clickWidgetRequest(const QString&);
     private:
         Ui::MainWindow *ui;
 };

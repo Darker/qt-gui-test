@@ -40,7 +40,12 @@ void MainWindow::menuClicked(QAction* a)
 
 void MainWindow::treeItemDbl(QModelIndex i)
 {
-
+    qDebug()<<"Abstract item clicked: "<<i.data().toString();
+}
+#include <QTreeWidgetItem>
+void MainWindow::treeItemDbl(QTreeWidgetItem*i, int index)
+{
+    qDebug()<<"Tree widget item clicked: "<<i->text(index);
 }
 #include <QMessageBox>
 void MainWindow::showDialog()

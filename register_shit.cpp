@@ -4,6 +4,7 @@
 #include "results/FileDialogResult.h"
 #include "results/QMenuResult.h"
 #include "results/QActionResult.h"
+#include "results/QAbstractItemViewResult.h"
 #include <memory>
 void register_shit()
 {
@@ -12,4 +13,5 @@ void register_shit()
     SearchResult::Factory::registerConstructor<FileDialogResult, QFileDialog>();
     SearchResult::Factory::registerConstructor<QMenuResult, QMenu>();
     SearchResult::Factory::registerConstructor<QActionResult, QAction>();
+    SearchResult::Factory::registerConstructor<QAbstractItemViewResult, QAbstractItemView>();
 }

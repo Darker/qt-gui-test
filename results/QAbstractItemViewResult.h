@@ -2,14 +2,16 @@
 #define QTREEWIDGETRESULT_H
 #include "WidgetResult.h"
 #include <QAbstractItemView>
-class QTreeWidgetResult : public WidgetResult
+class QAbstractItemViewResult : public WidgetResult
 {
     public:
-        QTreeWidgetResult(QAbstractItemView*, TestingModule*);
+        QAbstractItemViewResult(QAbstractItemView*, TestingModule*);
 
-        // SearchResult interface
+
     public slots:
         virtual void doubleClickItem(const QString&) override;
+    protected:
+        QAbstractItemView* targetView_;
 };
 
 #endif // QTREEWIDGETRESULT_H

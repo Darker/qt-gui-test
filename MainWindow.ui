@@ -112,11 +112,25 @@
      <property name="text">
       <string>dsadsa</string>
      </property>
+     <property name="text">
+      <string/>
+     </property>
      <item>
       <property name="text">
        <string>dsadsadsa</string>
       </property>
+      <property name="text">
+       <string/>
+      </property>
      </item>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Item</string>
+     </property>
+     <property name="text">
+      <string>second item</string>
+     </property>
     </item>
    </widget>
   </widget>
@@ -276,6 +290,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>treeWidget</sender>
+   <signal>itemDoubleClicked(QTreeWidgetItem*,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>treeItemDbl(QTreeWidgetItem*,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>153</x>
+     <y>230</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>367</x>
+     <y>305</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>clickWidget()</slot>
@@ -284,5 +314,6 @@
   <slot>showDialog()</slot>
   <slot>fileDialog()</slot>
   <slot>treeItemDbl(QModelIndex)</slot>
+  <slot>treeItemDbl(QTreeWidgetItem*,int)</slot>
  </slots>
 </ui>

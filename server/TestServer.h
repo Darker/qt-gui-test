@@ -17,6 +17,8 @@ class TestServer : public QObject
         void newConnection();
         void lineReceived(SmartSocket* socket, const QString& data);
         void disconnected(SmartSocket* socket);
+        //void messageForClient(const int clientId, const QString message);
+        void message(const QString message);
     protected:
         QList<SmartSocket*> sockets;
         QTcpServer *server;

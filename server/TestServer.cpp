@@ -22,7 +22,7 @@ void TestServer::newConnection()
     // need to grab the socket
     QTcpSocket *socket = server->nextPendingConnection();
 
-    socket->write("Hello client\r\n");
+    socket->write("TESTING LINE OK\r\n");
     socket->flush();
 
     SmartSocket* s = new SmartSocket(socket);
@@ -60,4 +60,11 @@ void TestServer::disconnected(SmartSocket* socket)
         sockets.
 
     }*/
+}
+
+void TestServer::message(const QString message)
+{
+    for(SmartSocket* s: sockets) {
+        s->writeln(message);
+    }
 }

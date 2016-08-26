@@ -1,12 +1,16 @@
 #include "TestingModule.h"
 #include "results/SearchResult.h"
+#include "AddChildEventFilter.h"
+#include "events/ChildEvent.h"
+#include "events/WaitRequestGUIText.h"
+#include <QDebug>
 
 
 TestingModule::TestingModule(QApplication* app) :
     QObject(app),
     app_(app)
 {
-
+    installEventFilters();
 }
 
 QWidget* TestingModule::byName(const QString& name)
@@ -58,6 +62,32 @@ TestingModule::~TestingModule()
 
 }
 
+bool TestingModule::event(QEvent*e)
+{
+    if(e->type() == QEvent::User) {
+        if(ChildEvent* chev = dynamic_cast<ChildEvent*>(e)) {
+            if(chev->mode == ChildEvent::ADD) {
+                qDebug()<<"Add"
+                        <<chev->child()->metaObject()->className()
+                        <<"to"
+                        <<chev->parent()->metaObject()->className();
+                // Check out events
+                for(int i=0,l=requests.length(); i<l; i++) {
+                //for(WaitRequestPtr req: requests) {
+                    WaitRequestPtr req(requests[i]);
+                    if(req->validate(chev->child())) {
+                        emit message(QString(QString::number(req->ID)));
+                        requests.removeAt(i);
+                        i--;l--;
+                    }
+                }
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
 void TestingModule::start()
 {
     moveToThread(app_->thread());
@@ -90,6 +120,19 @@ void TestingModule::command(const QString& name, const QString& paramstr)
         else if (name=="value" && params.length()>=2) {
             res->setValue(params[1]);
         }
+        //dblclickitem::treeWidget::dsadsa
+        else if (name=="dblclickitem" && params.length()>=2) {
+            res->doubleClickItem(params[1]);
+        } 
+    }
+    if (name=="wait" && params.length()>=2) {
+        if(res == nullptr) {
+            WaitRequestPtr req(new WaitRequestGUIText(selector, params[1].toInt()));
+            requests.push_back(req);
+        }
+        else {
+            emit message(params[1]);
+        }
     }
 }
 
@@ -110,3 +153,13 @@ SearchResultPtr TestingModule::byText(QObject* parentObj, const QString& text)
     }
     return nullptr;
 }
+
+
+void TestingModule::installEventFilters()
+{
+    app_->installEventFilter(new AddChildEventFilter(this, app_));
+    /*for(QWidget* widget: QApplication::allWidgets()) {
+        widget->installEventFilter(new AddChildEventFilter(widget));
+    }*/
+}
+

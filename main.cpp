@@ -13,7 +13,13 @@ int main(int argc, char *argv[])
     mod.start();
     // Start threaded server
     TestServer pokus;
-    QObject::connect(&pokus, &TestServer::command, &mod, &TestingModule::command, Qt::QueuedConnection);
+    QObject::connect(&pokus, &TestServer::command, &mod, &TestingModule::command);
+    //QObject::connect(&pokus, SIGNAL(command(const QString&,const QString&)),
+    //                 &mod, SLOT(command(const QString&,const QString&)), Qt::QueuedConnection);
+
+    QObject::connect(&mod, SIGNAL(message(const QString)),
+                     &pokus, SLOT(message(const QString)));
+    //QObject::connect(&mod, &TestingModule::message, &pokus, &TestServer::message, Qt::QueuedConnection);
 
 
     //QObject::connect(&w, &MainWindow::clickWidgetRequest, &mod, &TestingModule::clickWidgetByName, Qt::QueuedConnection);

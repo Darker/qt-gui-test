@@ -13,7 +13,8 @@ class SmartSocket : public QObject
     signals:
         void lineReceived(SmartSocket*, const QString&);
         void disconnected(SmartSocket*);
-
+    public slots:
+        void writeln(const QString&);
     protected slots:
         void slot_disconnected();
         void slot_data_available();

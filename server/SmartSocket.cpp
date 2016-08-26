@@ -14,6 +14,12 @@ SmartSocket::SmartSocket(QAbstractSocket *parent) :
                      this, &SmartSocket::slot_data_available);
 }
 
+void SmartSocket::writeln(const QString& ln)
+{
+    socket->write(QString(ln+"\r\n").toStdString().c_str());
+    socket->flush();
+}
+
 void SmartSocket::slot_disconnected()
 {
     emit disconnected(this);
