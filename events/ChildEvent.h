@@ -15,6 +15,8 @@ class ChildEvent : public QEvent
         ChildEvent(QObject* parent, QObject* child, Mode m);
         QObject* parent() const;
         QObject* child() const;
+        // Returns true if both child and parent are not null
+        bool valid() const;
         QWidget* parentWidget() const;
         QWidget* childWidget() const;
         const Mode mode;

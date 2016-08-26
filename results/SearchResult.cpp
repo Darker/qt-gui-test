@@ -1,9 +1,9 @@
 #include "SearchResult.h"
-#include "TestingModule.h"
+#include "../TestingModule.h"
 #include <QEvent>
 #include <QMouseEvent>
 #include <QPoint>
-#include <QTest>
+//#include <QTest>
 #include <QReadWriteLock>
 #include <QReadLocker>
 #include <QWriteLocker>

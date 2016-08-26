@@ -64,7 +64,11 @@ void TestServer::disconnected(SmartSocket* socket)
 
 void TestServer::message(const QString message)
 {
-    for(SmartSocket* s: sockets) {
-        s->writeln(message);
+    for (int i=0,l=sockets.size(); i<l; i++)
+    {
+        sockets[i]->writeln(message);
     }
+    /*for(SmartSocket* s: sockets) {
+        s->writeln(message);
+    }*/
 }

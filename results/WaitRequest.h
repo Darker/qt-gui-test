@@ -1,6 +1,7 @@
 #ifndef WAITREQUEST_H
 #define WAITREQUEST_H
 class QObject;
+class TestingModule;
 #include <memory>
 /**
  * @brief The WaitRequest class describes an ongoing instance
@@ -11,7 +12,7 @@ class WaitRequest
     public:
         WaitRequest(const int id);
         const int ID;
-        virtual bool validate(QObject*) const = 0;
+        virtual bool validate(QObject*, TestingModule*) const = 0;
         virtual ~WaitRequest();
 };
 typedef std::shared_ptr<WaitRequest> WaitRequestPtr;

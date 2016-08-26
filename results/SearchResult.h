@@ -47,7 +47,7 @@ class SearchResult : public QObject
         };
 
     signals:
-        clicked(const int x, const int y);
+        void clicked(const int x, const int y);
     public slots:
         virtual void setValue(const QVariant&);
         virtual void click(const int x, const int y);

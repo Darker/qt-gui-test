@@ -33,3 +33,8 @@ QWidget*ChildEvent::childWidget() const
         return dynamic_cast<QWidget*>(child_.data());
     return nullptr;
 }
+
+bool ChildEvent::valid() const
+{
+    return !child_.isNull() && !parent_.isNull();
+}

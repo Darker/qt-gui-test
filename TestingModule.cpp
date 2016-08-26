@@ -16,18 +16,19 @@ TestingModule::TestingModule(QApplication* app) :
 QWidget* TestingModule::byName(const QString& name)
 {
     QWidget* ret = nullptr;
-    for (auto top : app_->topLevelWidgets()) {
+    Q_FOREACH(auto top, app_->topLevelWidgets()) {
        ret = top->findChild<QWidget*>(name);
        if( ret!=nullptr )
            break;
     }
+    
     return ret;
 }
 
 SearchResultPtr TestingModule::byText(const QString& text)
 {
     SearchResultPtr ret = nullptr;
-    for (QWidget* top : app_->topLevelWidgets()) {
+    Q_FOREACH(QWidget* top, app_->topLevelWidgets()) {
        ret = byText(top, text);
        if(ret != nullptr)
            return ret;
@@ -67,15 +68,19 @@ bool TestingModule::event(QEvent*e)
     if(e->type() == QEvent::User) {
         if(ChildEvent* chev = dynamic_cast<ChildEvent*>(e)) {
             if(chev->mode == ChildEvent::ADD) {
-                qDebug()<<"Add"
-                        <<chev->child()->metaObject()->className()
+                if(!chev->valid())
+                    return true;
+                const QString childClassName =  chev->child()->metaObject()->className();
+                const QString parentClassName = chev->parent()->metaObject()->className();
+                /*qDebug()<<"Add"
+                        <<childClassName
                         <<"to"
-                        <<chev->parent()->metaObject()->className();
+                        <<parentClassName;*/
                 // Check out events
                 for(int i=0,l=requests.length(); i<l; i++) {
                 //for(WaitRequestPtr req: requests) {
                     WaitRequestPtr req(requests[i]);
-                    if(req->validate(chev->child())) {
+                    if(req->validate(chev->child(), this)) {
                         emit message(QString(QString::number(req->ID)));
                         requests.removeAt(i);
                         i--;l--;
@@ -138,7 +143,7 @@ void TestingModule::command(const QString& name, const QString& paramstr)
 
 SearchResultPtr TestingModule::byText(QObject* parentObj, const QString& text)
 {
-    for(QObject* object: parentObj->children()) {
+    Q_FOREACH(QObject* object, parentObj->children()) {
         SearchResultPtr tmp = SearchResult::Factory::fromObject(object, this, true);
         if(tmp == nullptr)
             continue;

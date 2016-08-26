@@ -2,7 +2,7 @@
 #include <QEvent>
 #include <QMouseEvent>
 #include <QPoint>
-#include <QTest>
+//#include <QTest>
 #define RETURN_IF_INVALID(X) \
   if(target_.isNull()) \
     return X;
@@ -25,7 +25,8 @@ void WidgetResult::click()
 void WidgetResult::click(const int x, const int y)
 {
     RETURN_IF_INVALID();
-    QTest::mouseClick(targetWidget_, Qt::LeftButton, Qt::NoModifier, QPoint(x, y), 100);
+    SearchResult::click(x, y);
+    //QTest::mouseClick(targetWidget_, Qt::LeftButton, Qt::NoModifier, QPoint(x, y), 100);
 }
 
 SearchResultPtr WidgetResult::Factory::newInstance(QObject* o, TestingModule*t) const
