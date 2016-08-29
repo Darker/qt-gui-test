@@ -7,6 +7,7 @@
 #include <QReadWriteLock>
 #include <QReadLocker>
 #include <QWriteLocker>
+#include <QApplication>
 
 #define RETURN_IF_INVALID(X) \
   if(target_.isNull()) \
@@ -14,9 +15,14 @@
 
 
 SearchResult::SearchResult(QObject *widget, TestingModule* app) :
-    QObject(app)
+    QObject(nullptr/*app!=nullptr?(QObject*)app:(QObject*)qApp*/)
   , target_(widget)
-  , app_(app->getApp())
+  , app_(app!=nullptr?app->getApp():qApp)
+{
+
+}
+
+SearchResult::~SearchResult()
 {
 
 }

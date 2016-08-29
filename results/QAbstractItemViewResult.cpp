@@ -42,10 +42,22 @@ QAbstractItemViewResult::QAbstractItemViewResult(QAbstractItemView*i, TestingMod
 void QAbstractItemViewResult::doubleClickItem(const QString& name)
 {
     QModelIndex index(findIndexByString(targetView_, name));
-    QString indexData = index.data().toString();
+    //QString indexData = index.data().toString();
     if(index.isValid()) {
         targetView_->doubleClicked(index);
     }
 }
 
 
+
+
+void QAbstractItemViewResult::selectItems(const QStringList& list)
+{
+    if(list.size() > 0) {
+        QModelIndex index(findIndexByString(targetView_, list[0]));
+        //QString indexData = index.data().toString();
+        if(index.isValid()) {
+            targetView_->clicked(index);
+        }
+    }
+}

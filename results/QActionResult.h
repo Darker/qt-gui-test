@@ -2,8 +2,8 @@
 #define QACTIONRESULT_H
 
 #include <QObject>
-#include <QAction>
 #include "SearchResult.h"
+class QAction;
 
 class QActionResult : public SearchResult
 {

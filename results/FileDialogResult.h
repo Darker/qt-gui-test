@@ -1,10 +1,11 @@
 #ifndef FILEDIALOGRESULT_H
 #define FILEDIALOGRESULT_H
 #include "DialogResult.h"
-#include <QFileDialog>
+class QFileDialog;
 
 class FileDialogResult : public DialogResult
 {
+        Q_OBJECT
     public:
         FileDialogResult(QFileDialog* dialog, TestingModule* module);
 

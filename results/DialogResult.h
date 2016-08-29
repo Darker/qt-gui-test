@@ -1,9 +1,10 @@
 #ifndef DIALOGRESULT_H
 #define DIALOGRESULT_H
 #include "WidgetResult.h"
-#include <QDialog>
+class QDialog;
 class DialogResult : public WidgetResult
 {
+        Q_OBJECT
     public:
         DialogResult(QDialog* dialog, TestingModule* module);
 

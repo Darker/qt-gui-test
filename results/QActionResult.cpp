@@ -1,4 +1,5 @@
 #include "QActionResult.h"
+#include <QAction>
 
 QActionResult::QActionResult(QAction* target, TestingModule* parent) :
     SearchResult(target, parent)

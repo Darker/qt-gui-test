@@ -1,6 +1,7 @@
 #include "FileDialogResult.h"
 #include <QVariant>
 #include <QFileInfo>
+#include <QFileDialog>
 
 FileDialogResult::FileDialogResult(QFileDialog* dialog, TestingModule* module) :
     DialogResult(dialog, module)

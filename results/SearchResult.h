@@ -16,7 +16,7 @@ class SearchResult : public QObject
         Q_OBJECT
     public:
         SearchResult(QObject*, TestingModule*);
-
+        virtual ~SearchResult();
         typedef std::shared_ptr<SearchResult> SearchResultPtr;
         class Factory {
             public:

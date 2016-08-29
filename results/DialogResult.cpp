@@ -1,4 +1,5 @@
 #include "DialogResult.h"
+#include <QDialog>
 
 DialogResult::DialogResult(QDialog* dialog, TestingModule* module) :
     WidgetResult(dialog, module)
