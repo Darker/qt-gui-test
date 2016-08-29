@@ -19,6 +19,7 @@ class TestingModule: public QObject
         Q_OBJECT
     public:
         TestingModule(QApplication* app);
+        TestingModule();
         virtual QWidget* byName(const QString& name);
         virtual SearchResultPtr byText(const QString& text);
         virtual ~TestingModule();
@@ -29,9 +30,11 @@ class TestingModule: public QObject
     public slots:
         void start();
         void command(const QString& name, const QString& paramstr);
+        // Starts listening on ALL changes in QApplication
+        void startListening();
     // Signals that can be delegated over to the listener
     signals:
-        void event(const TestingEvent&);
+        void t_event(const TestingEvent&);
         void message(const QString msg);
     protected:
         QPointer<QApplication> app_;

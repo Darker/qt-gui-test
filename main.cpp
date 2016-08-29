@@ -3,8 +3,14 @@
 #include "TestingModule.h"
 #include "server/TestServer.h"
 #include "register_shit.h"
+#include "test_css.h"
 int main(int argc, char *argv[])
 {
+    //run_test();
+    if(should_run_test()) {
+        QLIST_craziness();
+        return 0;
+    }
     QApplication a(argc, argv);
     MainWindow w;
     w.show();

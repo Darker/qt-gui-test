@@ -10,7 +10,14 @@ TestingModule::TestingModule(QApplication* app) :
     QObject(app),
     app_(app)
 {
-    installEventFilters();
+
+}
+
+TestingModule::TestingModule() :
+    QObject(qApp),
+    app_(qApp)
+{
+
 }
 
 QWidget* TestingModule::byName(const QString& name)
@@ -100,13 +107,24 @@ void TestingModule::start()
     //connect(this, SIGNAL(finished()), this, SLOT(deleteLater()));
     //QThread::start(priority);
 }
-
+#include "selectors/Selector.h"
+#include "results/SearchResultGroup.h"
 void TestingModule::command(const QString& name, const QString& paramstr)
 {
     QStringList params = paramstr.split("::");
     if(params.length()==0)
         return;
-    const QString selector = params[0];
+    SearchResultPtr res = nullptr;
+    QObjectList results = QObjectList();
+    const QString selectorStr = params[0];
+    SelectorPtr selector = Selector::parseString(selectorStr);
+    Q_FOREACH(QWidget* top, app_->topLevelWidgets()) {
+        QObject* parent = top->parent();
+        selector->find(top, false, results);
+    }
+    res = SearchResultPtr(new SearchResultGroup(results, this));
+
+    /*const QString selector = params[0];
     SearchResultPtr res = nullptr;
     {
         QWidget* w = byName(selector);
@@ -115,7 +133,7 @@ void TestingModule::command(const QString& name, const QString& paramstr)
         }
     }
     if(res == nullptr)
-        res = byText(selector);
+        res = byText(selector);*/
     //sleep(1);
     if(res !=nullptr) {
         if( name == "click" )
@@ -132,7 +150,7 @@ void TestingModule::command(const QString& name, const QString& paramstr)
     }
     if (name=="wait" && params.length()>=2) {
         if(res == nullptr) {
-            WaitRequestPtr req(new WaitRequestGUIText(selector, params[1].toInt()));
+            WaitRequestPtr req(new WaitRequestGUIText(selectorStr, params[1].toInt()));
             requests.push_back(req);
         }
         else {
@@ -141,14 +159,19 @@ void TestingModule::command(const QString& name, const QString& paramstr)
     }
 }
 
+void TestingModule::startListening()
+{
+    installEventFilters();
+}
+
 SearchResultPtr TestingModule::byText(QObject* parentObj, const QString& text)
 {
     Q_FOREACH(QObject* object, parentObj->children()) {
         SearchResultPtr tmp = SearchResult::Factory::fromObject(object, this, true);
         if(tmp == nullptr)
             continue;
-        const QString otext = tmp->getGUIText();
-        const QString oname = object->objectName();
+        //const QString otext = tmp->getGUIText();
+        //const QString oname = object->objectName();
 
         if(tmp->getGUIText().indexOf(text) != -1)
             return tmp;

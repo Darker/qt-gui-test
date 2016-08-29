@@ -1,7 +1,7 @@
 #-------------------------------------------------
 #
 # Project created by QtCreator 2016-08-02T20:17:23
-#h
+#
 #-------------------------------------------------
 
 QT       += core gui testlib network
@@ -30,7 +30,17 @@ SOURCES += main.cpp\
     AddChildEventFilter.cpp \
     events/ChildEvent.cpp \
     results/WaitRequest.cpp \
-    events/WaitRequestGUIText.cpp
+    events/WaitRequestGUIText.cpp \
+    selectors/Selector.cpp \
+    Message.cpp \
+    selectors/CssSelector.cpp \
+    selectors/Validator.cpp \
+    selectors/ValidatorName.cpp \
+    selectors/ValidatorClassName.cpp \
+    test_css.cpp \
+    selectors/ValidatorGUIText.cpp \
+    results/SearchResultGroup.cpp \
+    results/QLineEditResult.cpp
 
 HEADERS  += MainWindow.h \
     TestingModule.h \
@@ -49,6 +59,16 @@ HEADERS  += MainWindow.h \
     AddChildEventFilter.h \
     events/ChildEvent.h \
     results/WaitRequest.h \
-    events/WaitRequestGUIText.h
+    events/WaitRequestGUIText.h \
+    selectors/Selector.h \
+    Message.h \
+    selectors/CssSelector.h \
+    selectors/Validator.h \
+    selectors/ValidatorName.h \
+    selectors/ValidatorClassName.h \
+    test_css.h \
+    selectors/ValidatorGUIText.h \
+    results/SearchResultGroup.h \
+    results/QLineEditResult.h
 
 FORMS    += MainWindow.ui

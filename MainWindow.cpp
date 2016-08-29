@@ -58,3 +58,15 @@ void MainWindow::fileDialog()
     QString ddd = QFileDialog::getExistingDirectory(this, "Select file or die!");
     qDebug()<<"Selected file: "<<ddd;
 }
+ #include <QInputDialog>
+void MainWindow::askStuff()
+{
+    bool ok;
+    QString text = QInputDialog::getText(this, tr("QInputDialog::getText()"),
+                                         tr("User name:"), QLineEdit::Normal,
+                                         QDir::home().dirName(), &ok);
+    if (ok)
+        qDebug()<<"User says:"<<text;
+    else
+        qDebug()<<"User rejected given dialog.";
+}

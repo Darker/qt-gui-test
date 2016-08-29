@@ -25,6 +25,7 @@ class MainWindow : public QMainWindow
         void treeItemDbl(QTreeWidgetItem*,int);
         void showDialog();
         void fileDialog();
+        void askStuff();
     signals:
         void clickWidgetRequest(const QString&);
     private:

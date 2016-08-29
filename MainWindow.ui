@@ -17,7 +17,7 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>10</y>
       <width>75</width>
       <height>23</height>
@@ -30,8 +30,8 @@
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>70</y>
+      <x>80</x>
+      <y>50</y>
       <width>113</width>
       <height>20</height>
      </rect>
@@ -306,6 +306,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>askStuff()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>39</x>
+     <y>85</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>clickWidget()</slot>
@@ -315,5 +331,6 @@
   <slot>fileDialog()</slot>
   <slot>treeItemDbl(QModelIndex)</slot>
   <slot>treeItemDbl(QTreeWidgetItem*,int)</slot>
+  <slot>askStuff()</slot>
  </slots>
 </ui>

@@ -5,7 +5,10 @@
 #include "results/QMenuResult.h"
 #include "results/QActionResult.h"
 #include "results/QAbstractItemViewResult.h"
+#include "results/QLineEditResult.h"
 #include <memory>
+#include <QLineEdit>
+#include <QFileDialog>
 void register_shit()
 {
     SearchResult::Factory::registerConstructor(std::make_shared<WidgetResult::Factory>());
@@ -14,4 +17,5 @@ void register_shit()
     SearchResult::Factory::registerConstructor<QMenuResult, QMenu>();
     SearchResult::Factory::registerConstructor<QActionResult, QAction>();
     SearchResult::Factory::registerConstructor<QAbstractItemViewResult, QAbstractItemView>();
+    SearchResult::Factory::registerConstructor<QLineEditResult, QLineEdit>();
 }

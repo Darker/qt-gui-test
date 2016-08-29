@@ -1,11 +1,17 @@
 #ifndef VALIDATORCLASSNAME_H
 #define VALIDATORCLASSNAME_H
-
+#include "Validator.h"
+#include <QString>
 
 class ValidatorClassName : public Validator
 {
     public:
-        ValidatorClassName();
+        //ValidatorClassName(const QString& name);
+
+        virtual bool validate(QObject* object) const override;
+        virtual QString parse(const QString& source) override;
+    protected:
+        QString className_;
 };
 
 #endif // VALIDATORCLASSNAME_H
