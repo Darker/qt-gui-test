@@ -19,6 +19,16 @@ Command.prototype.execute = function (client) {
         this.resolver.apply(this, args);
     });
 }
+// Executes instantly and returns null
+Command.prototype.executeIgnore = function(client) {
+    if (client == null)
+        client = this.client;
+    var args = [];
+    args.push.apply(args, arguments);
+    args[0] = client;
+    args.unshift(()=>{}, ()=>{});
+    this.resolver.apply(this, args);
+}
 Command.prototype.resolver = function (resolve, reject) {
     resolve();
     /*return (resolve, reject) => {
@@ -58,6 +68,7 @@ WaitCommand.prototype.resolver = function (resolve, reject) {
 
 function WaitFor(selector, client) {
     this.selector = selector;
+    this.commandAfter = null;
     Command.call(this, client);
 }
 WaitFor.prototype = Object.create(Command.prototype);
@@ -77,6 +88,12 @@ WaitFor.prototype.resolver = function (resolve, reject, client) {
     catch (error) {
         reject(error);
     }
+    if(this.commandAfter)
+      this.commandAfter.executeIgnore(client);
+}
+WaitFor.prototype.after = function(commandAfterWaitStarts) {
+    this.commandAfter = commandAfterWaitStarts;
+    return this;
 }
 WaitFor.ID = 0;
 
