@@ -3,7 +3,7 @@
 #include <QString>
 #include <QObjectList>
 #include <memory>
-
+class TestingModule;
 class Selector
 {
     public:
@@ -12,7 +12,8 @@ class Selector
         virtual QObjectList find(QObject* parent, bool returnFirst);
         virtual QObjectList find(QObject* parent) {return find(parent, false);}
         virtual QObject* findOne(QObject* parent);
-        virtual bool satisfies(QObject* object) const = 0;
+        virtual bool satisfies(QObject* object, TestingModule* module) const = 0;
+        virtual bool satisfies(QObject* object) const {return satisfies(object, nullptr);}
         /** Parses input and returns remaining data for sub-selectors **/
         virtual QString parse(const QString&) = 0;
 

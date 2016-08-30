@@ -1,6 +1,6 @@
 #ifndef WAITREQUESTGUITEXT_H
 #define WAITREQUESTGUITEXT_H
-#include "../results/WaitRequest.h"
+#include "WaitRequest.h"
 #include <QString>
 
 class WaitRequestGUIText : public WaitRequest

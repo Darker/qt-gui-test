@@ -8,7 +8,7 @@ class ValidatorClassName : public Validator
     public:
         //ValidatorClassName(const QString& name);
 
-        virtual bool validate(QObject* object) const override;
+        virtual bool validate(QObject* object, TestingModule* m) const override;
         virtual QString parse(const QString& source) override;
     protected:
         QString className_;

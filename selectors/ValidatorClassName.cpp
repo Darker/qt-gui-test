@@ -8,7 +8,7 @@
 
 //}
 
-bool ValidatorClassName::validate(QObject* object) const
+bool ValidatorClassName::validate(QObject* object, TestingModule* m) const
 {
     return object->metaObject()->className() == className_;
 }

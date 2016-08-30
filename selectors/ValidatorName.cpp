@@ -6,7 +6,7 @@ ValidatorName::ValidatorName() :
 
 }
 
-bool ValidatorName::validate(QObject* object) const
+bool ValidatorName::validate(QObject* object, TestingModule* m) const
 {
     return object->objectName() == name_;
 }

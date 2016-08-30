@@ -8,7 +8,7 @@ class CssSelector : public Selector
     public:
         CssSelector(const QString&);
         CssSelector();
-        virtual bool satisfies(QObject* object) const override;
+        virtual bool satisfies(QObject* object, TestingModule*m) const override;
         QString parse(const QString&);
     protected:
         QList<std::shared_ptr<Validator>> sub_;

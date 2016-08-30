@@ -29,7 +29,7 @@ SOURCES += main.cpp\
     results/QAbstractItemViewResult.cpp \
     AddChildEventFilter.cpp \
     events/ChildEvent.cpp \
-    results/WaitRequest.cpp \
+    events/WaitRequest.cpp \
     events/WaitRequestGUIText.cpp \
     selectors/Selector.cpp \
     Message.cpp \
@@ -40,7 +40,8 @@ SOURCES += main.cpp\
     test_css.cpp \
     selectors/ValidatorGUIText.cpp \
     results/SearchResultGroup.cpp \
-    results/QLineEditResult.cpp
+    results/QLineEditResult.cpp \
+    events/WaitRequestCSS.cpp
 
 HEADERS  += MainWindow.h \
     TestingModule.h \
@@ -58,7 +59,7 @@ HEADERS  += MainWindow.h \
     results/QAbstractItemViewResult.h \
     AddChildEventFilter.h \
     events/ChildEvent.h \
-    results/WaitRequest.h \
+    events/WaitRequest.h \
     events/WaitRequestGUIText.h \
     selectors/Selector.h \
     Message.h \
@@ -69,6 +70,7 @@ HEADERS  += MainWindow.h \
     test_css.h \
     selectors/ValidatorGUIText.h \
     results/SearchResultGroup.h \
-    results/QLineEditResult.h
+    results/QLineEditResult.h \
+    events/WaitRequestCSS.h
 
 FORMS    += MainWindow.ui

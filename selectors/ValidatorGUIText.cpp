@@ -7,9 +7,9 @@ ValidatorGUIText::ValidatorGUIText()
 }
 
 
-bool ValidatorGUIText::validate(QObject* object) const
+bool ValidatorGUIText::validate(QObject* object, TestingModule* m) const
 {
-    SearchResultPtr result = SearchResult::Factory::fromObject(object, nullptr);
+    SearchResultPtr result = SearchResult::Factory::fromObject(object, m);
     return result->getGUIText().indexOf(text_)!=-1;
 }
 

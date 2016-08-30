@@ -123,17 +123,6 @@ void TestingModule::command(const QString& name, const QString& paramstr)
         selector->find(top, false, results);
     }
     res = SearchResultPtr(new SearchResultGroup(results, this));
-
-    /*const QString selector = params[0];
-    SearchResultPtr res = nullptr;
-    {
-        QWidget* w = byName(selector);
-        if(w != nullptr) {
-            res = SearchResult::Factory::fromObject(w, this);
-        }
-    }
-    if(res == nullptr)
-        res = byText(selector);*/
     //sleep(1);
     if(res !=nullptr) {
         if( name == "click" )
