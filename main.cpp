@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
     TestingModule mod(&a);
     register_shit();
     mod.start();
+    mod.startListening();
     // Start threaded server
     TestServer pokus;
     QObject::connect(&pokus, &TestServer::command, &mod, &TestingModule::command);

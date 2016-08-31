@@ -2,16 +2,16 @@
 #define WAITREQUESTCSSdsadsa_H
 #include "WaitRequest.h"
 #include <QString>
-class CssSelector;
-typedef std::shared_ptr<CssSelector> CssSelectorPtr;
+class Selector;
+typedef std::shared_ptr<Selector> SelectorPtr;
 class WaitRequestCSS : public WaitRequest
 {
     public:
-        WaitRequestCSS(CssSelectorPtr selector, const int id);
+        WaitRequestCSS(SelectorPtr selector, const int id);
         bool validate(QObject*, TestingModule*) const override;
     protected:
         const QString text_;
-        CssSelectorPtr selector_;
+        SelectorPtr selector_;
 };
 
 #endif // WAITREQUESTGUITEXT_H

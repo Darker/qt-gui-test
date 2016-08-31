@@ -23,6 +23,8 @@ class ChildEvent : public QEvent
     protected:
         QPointer<QObject> child_;
         QPointer<QObject> parent_;
+        const QObject* const originalChildPtr_;
+        const QObject* const originalParentPtr_;
 
 };
 

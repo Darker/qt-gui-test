@@ -10,7 +10,13 @@
 
 bool ValidatorClassName::validate(QObject* object, TestingModule* m) const
 {
-    return object->metaObject()->className() == className_;
+    const QMetaObject* meta = object->metaObject();
+    while(meta != nullptr) {
+        if(meta->className() == className_)
+            return true;
+        meta = meta->superClass();
+    }
+    return false;
 }
 
 QString ValidatorClassName::parse(const QString& source)

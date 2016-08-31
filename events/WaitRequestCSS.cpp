@@ -1,6 +1,6 @@
 #include "WaitRequestCSS.h"
-#include "../selectors/CssSelector.h"
-WaitRequestCSS::WaitRequestCSS(CssSelectorPtr selector, const int id)
+#include "../selectors/Selector.h"
+WaitRequestCSS::WaitRequestCSS(SelectorPtr selector, const int id)
  : WaitRequest(id)
  , selector_(selector)
 {

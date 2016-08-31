@@ -5,6 +5,8 @@ ChildEvent::ChildEvent(QObject* parent, QObject* child, Mode m) :
     QEvent(QEvent::User)
   , parent_(parent)
   , child_(child)
+  , originalChildPtr_(child)
+  , originalParentPtr_(parent)
   , mode(m)
 {
 

@@ -7,7 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+    ui->setupUi(this);//tableContextMenu(const QPoint&)
+    connect(ui->tableWidget, &QWidget::customContextMenuRequested, this, &MainWindow::tableContextMenu);
 }
 
 MainWindow::~MainWindow()
@@ -70,3 +71,30 @@ void MainWindow::askStuff()
     else
         qDebug()<<"User rejected given dialog.";
 }
+
+void MainWindow::cellDblClick(int x, int y)
+{
+    qDebug()<<"Cell double clicked at ["<<x<<", "<<y<<"]";
+}
+
+void MainWindow::tableContextMenu(const QPoint& point)
+{
+    makeContextMenu(point, ui->tableWidget);
+}
+#include <QMenu>
+void MainWindow::makeContextMenu(const QPoint& pos, QWidget* target)
+{
+    QMenu *menu = new QMenu(this);
+    menu->addAction(new QAction("Action 1", menu));
+    menu->addAction(new QAction("Action 2", menu));
+    menu->addAction(new QAction("Action 3", menu));
+    // Notify window about clicking
+    QObject::connect(menu, &QMenu::triggered, this, &MainWindow::menuClicked);
+    // If this is a scroll area, map coordinates to real app coordinates
+    if(QAbstractScrollArea* area = dynamic_cast<QAbstractScrollArea*>(target))
+        menu->popup(area->viewport()->mapToGlobal(pos));
+    else
+        menu->popup(pos);
+}
+
+

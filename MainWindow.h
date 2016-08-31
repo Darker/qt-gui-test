@@ -3,12 +3,13 @@
 
 #include <QMainWindow>
 #include <QModelIndex>
+#include <QPoint>
 class QAction;
 class QTreeWidgetItem;
 namespace Ui {
     class MainWindow;
 }
-
+class QMenu;
 class MainWindow : public QMainWindow
 {
         Q_OBJECT
@@ -26,8 +27,12 @@ class MainWindow : public QMainWindow
         void showDialog();
         void fileDialog();
         void askStuff();
+        void cellDblClick(int,int);
+        void tableContextMenu(const QPoint&);
     signals:
         void clickWidgetRequest(const QString&);
+    protected:
+        void makeContextMenu(const QPoint& pos, QWidget* target);
     private:
         Ui::MainWindow *ui;
 };

@@ -62,10 +62,10 @@ QString CssSelector::parse(const QString& input)
     }
 }
 
-bool CssSelector::satisfies(QObject* object) const
+bool CssSelector::satisfies(QObject* object, TestingModule*m) const
 {
     Q_FOREACH(ValidatorPtr validator, sub_) {
-        if(!validator->validate(object, TestingModule* m))
+        if(!validator->validate(object, m))
             return false;
     }
     return true;

@@ -2,7 +2,7 @@
 #include "results/SearchResult.h"
 #include "AddChildEventFilter.h"
 #include "events/ChildEvent.h"
-#include "events/WaitRequestGUIText.h"
+#include "events/WaitRequestCSS.h"
 #include <QDebug>
 
 
@@ -79,10 +79,10 @@ bool TestingModule::event(QEvent*e)
                     return true;
                 const QString childClassName =  chev->child()->metaObject()->className();
                 const QString parentClassName = chev->parent()->metaObject()->className();
-                /*qDebug()<<"Add"
+                qDebug()<<"Add"
                         <<childClassName
                         <<"to"
-                        <<parentClassName;*/
+                        <<parentClassName;
                 // Check out events
                 for(int i=0,l=requests.length(); i<l; i++) {
                 //for(WaitRequestPtr req: requests) {
@@ -117,12 +117,23 @@ void TestingModule::command(const QString& name, const QString& paramstr)
     SearchResultPtr res = nullptr;
     QObjectList results = QObjectList();
     const QString selectorStr = params[0];
-    SelectorPtr selector = Selector::parseString(selectorStr);
+    SelectorPtr selector(nullptr);
+    try {
+        selector = Selector::parseString(selectorStr);
+    }
+    catch(const std::runtime_error& e) {
+        emit message(QString("ERROR when parsing selector: %1").arg(e.what()));
+        return;
+    }
+
     Q_FOREACH(QWidget* top, app_->topLevelWidgets()) {
-        QObject* parent = top->parent();
+        //QObject* parent = top->parent();
         selector->find(top, false, results);
     }
-    res = SearchResultPtr(new SearchResultGroup(results, this));
+    if(results.length()>1)
+        res = SearchResultPtr(new SearchResultGroup(results, this));
+    else if (results.length()>0)
+        res = SearchResult::Factory::fromObject(results[0], this);
     //sleep(1);
     if(res !=nullptr) {
         if( name == "click" )
@@ -132,14 +143,16 @@ void TestingModule::command(const QString& name, const QString& paramstr)
         else if (name=="value" && params.length()>=2) {
             res->setValue(params[1]);
         }
-        //dblclickitem::treeWidget::dsadsa
         else if (name=="dblclickitem" && params.length()>=2) {
             res->doubleClickItem(params[1]);
-        } 
+        }
+        else if (name=="select" && params.length()>=2) {
+            res->selectItems(params.mid(2));
+        }
     }
     if (name=="wait" && params.length()>=2) {
         if(res == nullptr) {
-            WaitRequestPtr req(new WaitRequestGUIText(selectorStr, params[1].toInt()));
+            WaitRequestPtr req(new WaitRequestCSS(selector, params[1].toInt()));
             requests.push_back(req);
         }
         else {
@@ -176,7 +189,7 @@ void TestingModule::installEventFilters()
 {
     app_->installEventFilter(new AddChildEventFilter(this, app_));
     /*for(QWidget* widget: QApplication::allWidgets()) {
-        widget->installEventFilter(new AddChildEventFilter(widget));
+        widget->installEventFilter(new AddChildEventFilter(this, widget));
     }*/
 }
 

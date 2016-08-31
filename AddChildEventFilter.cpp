@@ -25,7 +25,7 @@ bool AddChildEventFilter::eventFilter(QObject* parent, QEvent* event) {
             if(chevent->added()) {
                 QObject* child = chevent->child();
                 if(child->isWidgetType()) {
-                    child->installEventFilter(new AddChildEventFilter(mod_, child));
+                    //child->installEventFilter(new AddChildEventFilter(mod_, child));
                     QCoreApplication::postEvent(
                                 mod_,
                                 new ChildEvent(

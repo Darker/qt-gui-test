@@ -7,12 +7,13 @@
 #include <QString>
 #include <QThread>
 #include <memory>
-#include "results/WaitRequest.h"
+#include "events/WaitRequest.h"
 #include "TestingEvent.h"
 class SearchResult;
 typedef std::shared_ptr<SearchResult> SearchResultPtr;
 
 class QEvent;
+
 
 class TestingModule: public QObject
 {
@@ -43,6 +44,7 @@ class TestingModule: public QObject
         // List of items we're waiting for
         // Currently, just GUI strings
         QList<WaitRequestPtr> requests;
+
 };
 
 #endif // TESTINGMODULE_H

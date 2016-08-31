@@ -16,6 +16,10 @@ class DialogResult : public WidgetResult
 
 
 
+
+        // SearchResult interface
+    public slots:
+        virtual QString getGUIText() override;
 };
 
 #endif // DIALOGRESULT_H
