@@ -35,6 +35,9 @@ Command.prototype.resolver = function (resolve, reject) {
         resolve();
     };*/
 }
+Command.prototype.toString = function() {
+    return "Generic command.";
+}
 Command.prototype.client = null;
 
 function SimpleCommand(text, client) {
@@ -46,14 +49,16 @@ Command.Simple = SimpleCommand;
 SimpleCommand.prototype.resolver = function (resolve, reject, client) {
     try {
         client.write(this.text + "\n");
-        console.log("SENT: " + this.text);
+        //console.log("SENT: " + this.text);
     }
     catch (error) {
         reject(error);
     }
     resolve();
 }
-
+SimpleCommand.prototype.toString = function() {
+    return "Simple: \""+this.text+"\"";
+}
 
 function WaitCommand(timeout, client) {
     this.delay = timeout;
@@ -65,6 +70,9 @@ WaitCommand.prototype.resolver = function (resolve, reject) {
     console.log("WAIT: " + this.delay + "ms");
     setTimeout(function () { console.log("WAIT: done");resolve(); }, this.delay);
 }
+WaitCommand.prototype.toString = function() {
+    return "Wait: " + this.delay + "ms";
+}
 
 function WaitFor(selector, client) {
     this.selector = selector;
@@ -74,7 +82,7 @@ function WaitFor(selector, client) {
 WaitFor.prototype = Object.create(Command.prototype);
 Command.WaitFor = WaitFor;
 WaitFor.prototype.resolver = function (resolve, reject, client) {
-    console.log("WAIT FOR: " + this.selector);
+    //console.log("WAIT FOR: " + this.selector);
     var id = WaitFor.ID++;
     client.on('data', (data) => {
         data = data + "";
@@ -94,6 +102,9 @@ WaitFor.prototype.resolver = function (resolve, reject, client) {
 WaitFor.prototype.after = function(commandAfterWaitStarts) {
     this.commandAfter = commandAfterWaitStarts;
     return this;
+}
+WaitFor.prototype.toString = function() {
+    return "Wait for selector: "+this.selector+"";
 }
 WaitFor.ID = 0;
 
@@ -126,6 +137,8 @@ CommandList.prototype.resolver = function (resolve, reject, client) {
     }
     return invokeNext();
 }
-
+CommandList.prototype.toString = function() {
+    return "Commands: "+this.commands.map((a)=>{return x.constructor.name;}).join(", ");
+}
 
 module.exports = Command;

@@ -10,7 +10,6 @@ function connectForever(port, ip, commands) {
     var client = connect.connect(port, ip);
 
     client.on('data', function (data) {
-        // Log the response from the HTTP server.
         console.log('RECEIVED: ' + data);
     }).on('connect', function () {
         console.log('Connection Success!\n\n');
@@ -24,11 +23,14 @@ function connectForever(port, ip, commands) {
               })
         });
     }).on('end', function () {
-        console.log('Disconnected');
+        console.log('Disconnected.');
         connectForever(port, ip, commands);
     }).on('error', function (error) {
         if(error.code!="ECONNREFUSED") {
-            console.log("ERROR: " + JSON.stringify(error));
+            if(error.code == "ECONNRESET")
+                console.log("Disconnected.");
+            else
+                console.log("ERROR: " + JSON.stringify(error));
         }
         connectForever(port, ip, commands);
     });
