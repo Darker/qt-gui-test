@@ -3,6 +3,7 @@
 class QObject;
 class TestingModule;
 #include <memory>
+#include <QString>
 /**
  * @brief The WaitRequest class describes an ongoing instance
  * of waiting for qwidget to appear.
@@ -10,8 +11,8 @@ class TestingModule;
 class WaitRequest
 {
     public:
-        WaitRequest(const int id);
-        const int ID;
+        WaitRequest(const QString& id);
+        const QString ID;
         virtual bool validate(QObject*, TestingModule*) const = 0;
         virtual ~WaitRequest();
 };

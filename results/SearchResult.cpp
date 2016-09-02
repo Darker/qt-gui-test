@@ -41,10 +41,15 @@ void SearchResult::click(const int x, const int y)
     sendMouseEvent(QEvent::MouseButtonRelease, x, y, Qt::LeftButton);
 }
 
+void SearchResult::click(const QPoint&p)
+{
+    click(p.x(), p.y());
+}
+
 void SearchResult::click()
 {
     RETURN_IF_INVALID()
-    click(0, 0);
+    click(getMidpoint());
 }
 
 void SearchResult::hover(const int x, const int y)
@@ -52,6 +57,16 @@ void SearchResult::hover(const int x, const int y)
     //sendMouseEvent(QEvent::MouseMove, x, y, Qt::NoButton);
     QHoverEvent* eve = new QHoverEvent( QEvent::HoverEnter, QPoint(x,y), QPoint(x,y));
     sendEvent(eve);
+}
+
+
+
+void SearchResult::contextMenu(const int, const int)
+{}
+
+QPoint SearchResult::getMidpoint()
+{
+    return QPoint(0,0);
 }
 
 void SearchResult::submit()
@@ -75,10 +90,7 @@ QString SearchResult::getGUIText()
 
 void SearchResult::doubleClickItem(const QString&) {}
 
-void SearchResult::selectItems(const QStringList&)
-{
-
-}
+void SearchResult::selectItems(const QStringList&) {}
 
 
 void SearchResult::sendEvent(QEvent* e)

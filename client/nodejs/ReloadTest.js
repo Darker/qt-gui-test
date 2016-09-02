@@ -27,10 +27,12 @@ function connectForever(port, ip, commands) {
         connectForever(port, ip, commands);
     }).on('error', function (error) {
         if(error.code!="ECONNREFUSED") {
-            if(error.code == "ECONNRESET")
+            if (error.code == "ECONNRESET")
                 console.log("Disconnected.");
-            else
+            else {
                 console.log("ERROR: " + JSON.stringify(error));
+                console.log("    connecting to " + ip + ":" + port);
+            }
         }
         connectForever(port, ip, commands);
     });

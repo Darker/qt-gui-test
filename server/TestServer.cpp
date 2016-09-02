@@ -2,6 +2,7 @@
 #include <QTcpSocket>
 
 TestServer::TestServer(QObject *parent) : QObject(parent)
+  , client_id(0)
 {
     server = new QTcpServer(this);
 
@@ -26,6 +27,7 @@ void TestServer::newConnection()
     socket->flush();
 
     SmartSocket* s = new SmartSocket(socket);
+    s->setName(QString::number(++client_id));
     sockets.push_back(s);
     connect(s, &SmartSocket::lineReceived, this, &TestServer::lineReceived);
     connect(s, &SmartSocket::disconnected, this, &TestServer::disconnected);
@@ -48,6 +50,15 @@ void TestServer::lineReceived(SmartSocket* socket, const QString& data)
         cmd = data.left(index);
         params = data.mid(index+2);
     }
+    // Tmp fix to make reply messages different for each client
+    // otherwise clients receive other client's replies
+    if(cmd == "wait") {
+        QStringList l = params.split("::");
+        if(l.length()>1) {
+            l[1] = QString("client_%1_%2").arg(socket->getName()).arg(l[1]);
+            params = l.join("::");
+        }
+    }
 
     emit command(cmd, params);
 }
@@ -64,9 +75,22 @@ void TestServer::disconnected(SmartSocket* socket)
 
 void TestServer::message(const QString message)
 {
+    bool priv = message.startsWith("client_");
     for (int i=0,l=sockets.size(); i<l; i++)
     {
-        sockets[i]->writeln(message);
+        SmartSocket*const socket = sockets[i];
+
+        if(priv) {
+            const QString prefix("client_"+socket->getName()+"_");
+            if(message.startsWith(prefix)) {
+                QString realMsg = message.mid(prefix.length());
+                socket->writeln(realMsg);
+                break;
+            }
+        }
+        else {
+            socket->writeln(message);
+        }
     }
     /*for(SmartSocket* s: sockets) {
         s->writeln(message);

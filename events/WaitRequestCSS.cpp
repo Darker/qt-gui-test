@@ -1,6 +1,6 @@
 #include "WaitRequestCSS.h"
 #include "../selectors/Selector.h"
-WaitRequestCSS::WaitRequestCSS(SelectorPtr selector, const int id)
+WaitRequestCSS::WaitRequestCSS(SelectorPtr selector, const QString& id)
  : WaitRequest(id)
  , selector_(selector)
 {
@@ -9,5 +9,15 @@ WaitRequestCSS::WaitRequestCSS(SelectorPtr selector, const int id)
 
 bool WaitRequestCSS::validate(QObject*o, TestingModule* m) const
 {
-  return selector_->satisfies(o, m);
+    if(selector_->satisfies(o, m)) {
+        return true;
+    }
+    else {
+        QObjectList results;
+        selector_->find(o, true, results);
+        if(results.size()>0) {
+            return true;
+        }
+    }
+    return false;
 }

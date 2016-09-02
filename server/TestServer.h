@@ -22,6 +22,7 @@ class TestServer : public QObject
     protected:
         QList<SmartSocket*> sockets;
         QTcpServer *server;
+        unsigned int client_id;
 };
 
 #endif // TESTSERVER_H

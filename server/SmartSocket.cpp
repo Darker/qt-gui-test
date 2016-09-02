@@ -89,6 +89,16 @@ void SmartSocket::slot_data_available()
     }
 }
 
+void SmartSocket::setName(const QString& value)
+{
+    name = value;
+}
+
+QString SmartSocket::getName() const
+{
+    return name;
+}
+
 void SmartSocket::handleNewLine()
 {
     const QString line = QString::fromUtf8(buffer);

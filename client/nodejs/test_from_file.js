@@ -1,7 +1,7 @@
 const Arguments = require("./SimpleArgv");
 const ARGS = new Arguments();
-ARGS.defaults.port = "9666";
-ARGS.defaults.ip = "127.0.0.1";
+ARGS.default("ip", "127.0.0.1")
+ARGS.default("port", "9666");
 
 if (typeof ARGS.arg_commands != "string")
     throw new Error("Argument commands=\"path/file.js\" required. Provide valid file name.");

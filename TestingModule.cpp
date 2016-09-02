@@ -88,7 +88,7 @@ bool TestingModule::event(QEvent*e)
                 //for(WaitRequestPtr req: requests) {
                     WaitRequestPtr req(requests[i]);
                     if(req->validate(chev->child(), this)) {
-                        emit message(QString(QString::number(req->ID)));
+                        emit message(req->ID);
                         requests.removeAt(i);
                         i--;l--;
                     }
@@ -138,6 +138,15 @@ void TestingModule::command(const QString& name, const QString& paramstr)
     if(res !=nullptr) {
         if( name == "click" )
             res->click();
+        if( name == "ctx" ) {
+            if( params.size()>3 ) {
+                res->contextMenu(params[2].toInt(),params[3].toInt());
+            }
+            else {
+                res->contextMenu();
+            }
+
+        }
         else if (name=="submit")
             res->submit();
         else if (name=="value" && params.length()>=2) {
@@ -150,9 +159,9 @@ void TestingModule::command(const QString& name, const QString& paramstr)
             res->selectItems(params.mid(2));
         }
     }
-    if (name=="wait" && params.length()>=2) {
+    if (name=="wait" && params.length()>=2 && params[1].length()>0) {
         if(res == nullptr) {
-            WaitRequestPtr req(new WaitRequestCSS(selector, params[1].toInt()));
+            WaitRequestPtr req(new WaitRequestCSS(selector, params[1]));
             requests.push_back(req);
         }
         else {

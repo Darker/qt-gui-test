@@ -14,10 +14,17 @@ class WidgetResult : public SearchResult
                 virtual QString objectName() const override;
         };
     public slots:
-        void click() override;
         void click(const int x, const int y) override;
     private:
         QPointer<QWidget> targetWidget_;
+
+        // SearchResult interface
+    public slots:
+        virtual QPoint getMidpoint() override;
+
+        // SearchResult interface
+    public slots:
+        virtual void contextMenu(const int x, const int y) override;
 };
 typedef std::shared_ptr<WidgetResult> WidgetResultPtr;
 #endif // WIDGETRESULT_H

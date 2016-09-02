@@ -2,7 +2,7 @@
 
 
 
-WaitRequest::WaitRequest(const int id)
+WaitRequest::WaitRequest(const QString& id)
  : ID(id)
 {
 

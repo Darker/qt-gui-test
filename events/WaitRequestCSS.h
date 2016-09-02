@@ -7,7 +7,7 @@ typedef std::shared_ptr<Selector> SelectorPtr;
 class WaitRequestCSS : public WaitRequest
 {
     public:
-        WaitRequestCSS(SelectorPtr selector, const int id);
+        WaitRequestCSS(SelectorPtr selector, const QString& id);
         bool validate(QObject*, TestingModule*) const override;
     protected:
         const QString text_;

@@ -2,7 +2,7 @@
 #include <QObject>
 #include "../results/WidgetResult.h"
 #include "../TestingModule.h"
-WaitRequestGUIText::WaitRequestGUIText(const QString& text, const int id)
+WaitRequestGUIText::WaitRequestGUIText(const QString& text, const QString& id)
  : WaitRequest(id)
  , text_(text)
 {

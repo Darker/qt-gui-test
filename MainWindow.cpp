@@ -90,6 +90,7 @@ void MainWindow::makeContextMenu(const QPoint& pos, QWidget* target)
     menu->addAction(new QAction("Action 3", menu));
     // Notify window about clicking
     QObject::connect(menu, &QMenu::triggered, this, &MainWindow::menuClicked);
+    QObject::connect(menu, &QMenu::triggered, menu, &QMenu::deleteLater);
     // If this is a scroll area, map coordinates to real app coordinates
     if(QAbstractScrollArea* area = dynamic_cast<QAbstractScrollArea*>(target))
         menu->popup(area->viewport()->mapToGlobal(pos));

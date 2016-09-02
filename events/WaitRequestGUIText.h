@@ -6,7 +6,7 @@
 class WaitRequestGUIText : public WaitRequest
 {
     public:
-        WaitRequestGUIText(const QString& text, const int id);
+        WaitRequestGUIText(const QString& text, const QString& id);
         bool validate(QObject*, TestingModule*) const override;
     protected:
         const QString text_;

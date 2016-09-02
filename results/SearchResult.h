@@ -6,7 +6,7 @@
 //#include <QApplication>
 #include <QPointer>
 #include <memory>
-
+#include <QPoint>
 class QApplication;
 class QReadWriteLock;
 class TestingModule;
@@ -50,9 +50,19 @@ class SearchResult : public QObject
         void clicked(const int x, const int y);
     public slots:
         virtual void setValue(const QVariant&);
+        // Always override (x,y) based methods
         virtual void click(const int x, const int y);
+        virtual void click(const QPoint&);
         virtual void click();
+
         virtual void hover(const int x, const int y);
+
+        virtual void contextMenu(const int x, const int y);
+        virtual void contextMenu()             {contextMenu(getMidpoint());}
+        virtual void contextMenu(const QPoint&p){contextMenu(p.x(), p.y());}
+
+        // For graphical objects, shall return mouse coordinates of this object
+        virtual QPoint getMidpoint();
         // Submits the data
         // This is almost unique to dialogs
         virtual void submit();

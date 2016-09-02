@@ -14,19 +14,9 @@ WidgetResult::WidgetResult(QWidget *widget, TestingModule* app) :
 {
 
 }
-void WidgetResult::click()
-{
-    RETURN_IF_INVALID()
-    const int x = targetWidget_->width()/2;
-    const int y = targetWidget_->height()/2;
-    SearchResult::click(x, y);
-}
-
 void WidgetResult::click(const int x, const int y)
 {
-    RETURN_IF_INVALID();
     SearchResult::click(x, y);
-    //QTest::mouseClick(targetWidget_, Qt::LeftButton, Qt::NoModifier, QPoint(x, y), 100);
 }
 
 SearchResultPtr WidgetResult::Factory::newInstance(QObject* o, TestingModule*t) const
@@ -37,4 +27,17 @@ SearchResultPtr WidgetResult::Factory::newInstance(QObject* o, TestingModule*t) 
 QString WidgetResult::Factory::objectName() const
 {
     return "QWidget";
+}
+
+
+QPoint WidgetResult::getMidpoint()
+{
+    return QPoint(targetWidget_->width()/2.0, targetWidget_->height()/2.0);
+}
+
+
+void WidgetResult::contextMenu(const int x, const int y)
+{
+    RETURN_IF_INVALID();
+    targetWidget_->customContextMenuRequested(QPoint(x, y));
 }

@@ -10,6 +10,10 @@ class SmartSocket : public QObject
     public:
         explicit SmartSocket(QAbstractSocket* parent = 0);
         QAbstractSocket* getSocket() {return socket;}
+        QString getName() const;
+
+        void setName(const QString& value);
+
     signals:
         void lineReceived(SmartSocket*, const QString&);
         void disconnected(SmartSocket*);
@@ -20,6 +24,8 @@ class SmartSocket : public QObject
         void slot_data_available();
     protected:
         QAbstractSocket* socket;
+        // Used by server for identification
+        QString name;
         QByteArray buffer;
         // Allows user to recall previous commands
         QStringList history;

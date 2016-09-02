@@ -8,10 +8,12 @@ QActionResult::QActionResult(QAction* target, TestingModule* parent) :
 
 void QActionResult::click()
 {
-    targetAction_->trigger();
+    if(!targetAction_.isNull())
+        targetAction_->trigger();
 }
 
 void QActionResult::submit()
 {
-    targetAction_->trigger();
+    if(!targetAction_.isNull())
+        targetAction_->trigger();
 }
