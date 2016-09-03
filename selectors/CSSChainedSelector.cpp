@@ -35,9 +35,11 @@ QObjectList CSSChainedSelector::find(QObject* parent, bool returnFirst, QObjectL
             }
             //
             else {
-                targetList.append(child);
-                if(returnFirst) {
-                    return targetList;
+                if(!targetList.contains(child)) {
+                    targetList.append(child);
+                    if(returnFirst) {
+                        return targetList;
+                    }
                 }
             }
         }
