@@ -108,8 +108,9 @@ void TestingModule::start()
     //QThread::start(priority);
 }
 #include "selectors/Selector.h"
+#include "selectors/CSSChainedSelector.h"
 #include "results/SearchResultGroup.h"
-void TestingModule::command(const QString& name, const QString& paramstr)
+void TestingModule::command(const QString& command, const QString& paramstr)
 {
     QStringList params = paramstr.split("::");
     if(params.length()==0)
@@ -117,9 +118,12 @@ void TestingModule::command(const QString& name, const QString& paramstr)
     SearchResultPtr res = nullptr;
     QObjectList results = QObjectList();
     const QString selectorStr = params[0];
-    SelectorPtr selector(nullptr);
+    bool findOneOnly = false;
+    if(command == "wait" || command=="coords")
+      findOneOnly = true;
+    SelectorPtr selector(new CSSChainedSelector);
     try {
-        selector = Selector::parseString(selectorStr);
+        selector->parse(selectorStr);
     }
     catch(const std::runtime_error& e) {
         emit message(QString("ERROR when parsing selector: %1").arg(e.what()));
@@ -128,7 +132,9 @@ void TestingModule::command(const QString& name, const QString& paramstr)
 
     Q_FOREACH(QWidget* top, app_->topLevelWidgets()) {
         //QObject* parent = top->parent();
-        selector->find(top, false, results);
+        selector->find(top, findOneOnly, results);
+        if(findOneOnly && results.size()>0)
+            break;
     }
     if(results.length()>1)
         res = SearchResultPtr(new SearchResultGroup(results, this));
@@ -136,30 +142,37 @@ void TestingModule::command(const QString& name, const QString& paramstr)
         res = SearchResult::Factory::fromObject(results[0], this);
     //sleep(1);
     if(res !=nullptr) {
-        if( name == "click" )
+        if( command == "click" )
             res->click();
-        if( name == "ctx" ) {
-            if( params.size()>3 ) {
-                res->contextMenu(params[2].toInt(),params[3].toInt());
+        if( command == "ctx" ) {
+            if( params.size()>2 ) {
+                res->contextMenu(params[1].toInt(),params[2].toInt());
             }
             else {
                 res->contextMenu();
             }
-
         }
-        else if (name=="submit")
+        else if (command=="submit")
             res->submit();
-        else if (name=="value" && params.length()>=2) {
+        else if (command=="value" && params.length()>=2) {
             res->setValue(params[1]);
         }
-        else if (name=="dblclickitem" && params.length()>=2) {
+        else if (command=="dblclickitem" && params.length()>=2) {
             res->doubleClickItem(params[1]);
         }
-        else if (name=="select" && params.length()>=2) {
+        else if (command=="select" && params.length()>=2) {
             res->selectItems(params.mid(2));
         }
+        else if(command=="coords") {
+            const QPoint loc(res->getMidpoint());
+            QString replyID("coords");
+            if(params.length()>=2) {
+                replyID = params[1];
+            }
+            emit message(QString("%1 %2 %3").arg(replyID).arg(loc.x()).arg(loc.y()));
+        }
     }
-    if (name=="wait" && params.length()>=2 && params[1].length()>0) {
+    if (command=="wait" && params.length()>=2 && params[1].length()>0) {
         if(res == nullptr) {
             WaitRequestPtr req(new WaitRequestCSS(selector, params[1]));
             requests.push_back(req);
@@ -167,6 +180,9 @@ void TestingModule::command(const QString& name, const QString& paramstr)
         else {
             emit message(params[1]);
         }
+    }
+    else if(command=="count") {
+        emit message(QString("Element %1 occurs %2 times.").arg(selectorStr).arg(results.size()));
     }
 }
 

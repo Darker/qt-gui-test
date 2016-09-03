@@ -96,8 +96,10 @@ WaitFor.prototype.resolver = function (resolve, reject, client) {
     catch (error) {
         reject(error);
     }
-    if(this.commandAfter)
+    if(this.commandAfter) {
+      console.log("After wait: "+this.commandAfter);
       this.commandAfter.executeIgnore(client);
+    }
 }
 WaitFor.prototype.after = function(commandAfterWaitStarts) {
     this.commandAfter = commandAfterWaitStarts;
@@ -120,7 +122,7 @@ CommandList.prototype.resolver = function (resolve, reject, client) {
     if (commands.length == 0)
         resolve();
     function invokeNext() {
-        console.log("LIST: Running command #" + index);
+        console.log("LIST: Running command #" + index + " " + commands[index]);
         return commands[index].execute(client)
           .then(function () {
               console.log("LIST: Finished command #" + index+"\n");

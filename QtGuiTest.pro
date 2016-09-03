@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = QtGuiTest
 TEMPLATE = app
-
+CONFIG += c++11
 
 SOURCES += main.cpp\
         MainWindow.cpp \
@@ -41,7 +41,8 @@ SOURCES += main.cpp\
     selectors/ValidatorGUIText.cpp \
     results/SearchResultGroup.cpp \
     results/QLineEditResult.cpp \
-    events/WaitRequestCSS.cpp
+    events/WaitRequestCSS.cpp \
+    selectors/CSSChainedSelector.cpp
 
 HEADERS  += MainWindow.h \
     TestingModule.h \
@@ -71,6 +72,7 @@ HEADERS  += MainWindow.h \
     selectors/ValidatorGUIText.h \
     results/SearchResultGroup.h \
     results/QLineEditResult.h \
-    events/WaitRequestCSS.h
+    events/WaitRequestCSS.h \
+    selectors/CSSChainedSelector.h
 
 FORMS    += MainWindow.ui

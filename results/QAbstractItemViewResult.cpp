@@ -27,7 +27,7 @@ QModelIndex findIndexByString(const QAbstractItemModel* model, const QString& te
     return QModelIndex();
 }
 QModelIndex findIndexByString(const QAbstractItemView* view, const QString& text) {
-    const QModelIndex root = view->rootIndex();
+    //const QModelIndex root = view->rootIndex();
     const QAbstractItemModel* model = view->model();
     return findIndexByString(model, text);
 }

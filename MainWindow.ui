@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>714</width>
-    <height>341</height>
+    <width>893</width>
+    <height>550</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -191,13 +191,53 @@
      </property>
     </item>
    </widget>
+   <widget class="QWidget" name="wrap1" native="true">
+    <property name="geometry">
+     <rect>
+      <x>550</x>
+      <y>60</y>
+      <width>181</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="wrap2" native="true">
+     <property name="geometry">
+      <rect>
+       <x>39</x>
+       <y>29</y>
+       <width>91</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <widget class="QLineEdit" name="lineEdit_3">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>10</y>
+        <width>113</width>
+        <height>20</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_2">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>90</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>714</width>
+     <width>893</width>
      <height>21</height>
     </rect>
    </property>

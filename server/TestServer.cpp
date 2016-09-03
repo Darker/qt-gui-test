@@ -52,7 +52,7 @@ void TestServer::lineReceived(SmartSocket* socket, const QString& data)
     }
     // Tmp fix to make reply messages different for each client
     // otherwise clients receive other client's replies
-    if(cmd == "wait") {
+    if(cmd == "wait" || cmd=="coords") {
         QStringList l = params.split("::");
         if(l.length()>1) {
             l[1] = QString("client_%1_%2").arg(socket->getName()).arg(l[1]);
