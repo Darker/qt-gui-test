@@ -82,12 +82,14 @@ void MainWindow::tableContextMenu(const QPoint& point)
     makeContextMenu(point, ui->tableWidget);
 }
 #include <QMenu>
+#include "DeleteOnHideFilter.h"
 void MainWindow::makeContextMenu(const QPoint& pos, QWidget* target)
 {
     QMenu *menu = new QMenu(this);
+    menu->installEventFilter(new DeleteOnHideFilter(menu));
     menu->addAction(new QAction("Action 1", menu));
     menu->addAction(new QAction("Action 2", menu));
-    menu->addAction(new QAction("Action 3", menu));
+    menu->addAction(new QAction("Pičo vole napalm", menu));
     // Notify window about clicking
     QObject::connect(menu, &QMenu::triggered, this, &MainWindow::menuClicked);
     QObject::connect(menu, &QMenu::triggered, menu, &QMenu::deleteLater);

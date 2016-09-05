@@ -13,11 +13,8 @@ bool WaitRequestCSS::validate(QObject*o, TestingModule* m) const
         return true;
     }
     else {
-        QObjectList results;
-        selector_->find(o, true, results);
-        if(results.size()>0) {
+        if(validateChildren(o, m, true))
             return true;
-        }
     }
     return false;
 }

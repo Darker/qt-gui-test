@@ -8,7 +8,7 @@
 
 //}
 
-bool ValidatorClassName::validate(QObject* object, TestingModule* m) const
+bool ValidatorClassName::validate(QObject* object, TestingModule*) const
 {
     const QMetaObject* meta = object->metaObject();
     while(meta != nullptr) {

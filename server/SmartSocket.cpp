@@ -1,12 +1,14 @@
 #include "SmartSocket.h"
 #include "ANSI.h"
 #include <QDebug>
+#include <QTextCodec>
 SmartSocket::SmartSocket(QAbstractSocket *parent) :
     QObject(parent)
   , socket(parent)
   , history_pos(0)
   , controlReceived(false)
   , escReceived(true)
+  , encoding(nullptr)
 {
     QObject::connect(parent, &QAbstractSocket::disconnected,
                      this, &SmartSocket::slot_disconnected);
@@ -16,8 +18,16 @@ SmartSocket::SmartSocket(QAbstractSocket *parent) :
 
 void SmartSocket::writeln(const QString& ln)
 {
-    socket->write(QString(ln+"\r\n").toStdString().c_str());
+    socket->write(SmartSocket::encodeString(ln+"\r\n"));
     socket->flush();
+}
+
+QByteArray SmartSocket::encodeString(const QString& str) const
+{
+    if(encoding == nullptr)
+        return str.toUtf8();
+    else
+        return encoding->fromUnicode(str);
 }
 
 void SmartSocket::slot_disconnected()
@@ -28,9 +38,14 @@ void SmartSocket::slot_disconnected()
 void SmartSocket::slot_data_available()
 {
     QByteArray data = socket->readAll();
+    QString string("");
+    if(encoding != nullptr)
+        string = encoding->toUnicode(data);
+    else
+        string = QString::fromUtf8(data);
 
-    for(int i=0,l=data.length(); i<l; i++) {
-       char oneByte = data[i];
+    for(int i=0,l=string.length(); i<l; i++) {
+       QChar oneByte = string[i];
        // Will be set to true to prevent adding this to buffer
        bool consumed = false;
        if(oneByte == '\n') {
@@ -61,7 +76,7 @@ void SmartSocket::slot_data_available()
                data.append("                                           ");
                data.append(ANSI::RETURN);
                const QString& str = historyRetrieve();
-               data.append(str);
+               data.append(encodeString(str));
                socket->write(data);
                buffer.clear();
                buffer.append(str);
@@ -102,7 +117,33 @@ QString SmartSocket::getName() const
 void SmartSocket::handleNewLine()
 {
     const QString line = QString::fromUtf8(buffer);
-    emit lineReceived(this, line);
+    if(line.startsWith("encoding ")) {
+        const QString encName = line.mid(9);
+        if(encName=="win" ||
+                encName=="windows" ||
+                encName=="windoze") {
+            encoding = QTextCodec::codecForName("CP-1252");
+        }
+        else if(encName=="list") {
+            QList<QByteArray> codecs(QTextCodec::availableCodecs());
+            const QTextCodec*const originalEncoding = encoding;
+            const QString testString(QString(": ěščřžýáíé"));
+            Q_FOREACH(QByteArray codecName, codecs) {
+                encoding = QTextCodec::codecForName(codecName);
+                writeln(QString::fromUtf8(codecName)+testString);
+            }
+            encoding = originalEncoding;
+        }
+        else if(encName=="default") {
+            encoding = nullptr;
+        }
+        else {
+            encoding = QTextCodec::codecForName(encName.toStdString().c_str());
+        }
+    }
+    else {
+        emit lineReceived(this, line);
+    }
     buffer.clear();
     historyAdd(line);
 }

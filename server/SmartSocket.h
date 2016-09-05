@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QAbstractSocket>
-
+class QTextCodec;
 class SmartSocket : public QObject
 {
         Q_OBJECT
@@ -19,6 +19,7 @@ class SmartSocket : public QObject
         void disconnected(SmartSocket*);
     public slots:
         void writeln(const QString&);
+        QByteArray encodeString(const QString&) const;
     protected slots:
         void slot_disconnected();
         void slot_data_available();
@@ -26,6 +27,7 @@ class SmartSocket : public QObject
         QAbstractSocket* socket;
         // Used by server for identification
         QString name;
+        const QTextCodec* encoding;
         QByteArray buffer;
         // Allows user to recall previous commands
         QStringList history;

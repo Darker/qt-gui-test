@@ -2,6 +2,7 @@
 #include "ValidatorName.h"
 #include "ValidatorClassName.h"
 #include "ValidatorGUIText.h"
+#include "ValidatorProperty.h"
 #include <stdexcept>
 
 
@@ -40,6 +41,9 @@ QString CssSelector::parse(const QString& input)
         }
         else if(character == '"') {
             validator.reset(new ValidatorGUIText);
+        }
+        else if(character == '[') {
+            validator.reset(new ValidatorProperty);
         }
         // End of selector
         else if(character == ' ') {

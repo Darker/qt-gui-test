@@ -7,9 +7,10 @@ bool should_run_test() {
 
 void run_test()
 {
-    CssSelector pokus("QWidget#ble");
-    pokus.parse("\"pokus\"");
+    CssSelector pokus("[text=blabla]");
+    pokus.parse("QWidget#ble");
     qDebug()<<"Done.";
+
 }
 QObjectList the_recursive_fn(QObjectList& list, int iteration = 2) {
     if(iteration>0) {

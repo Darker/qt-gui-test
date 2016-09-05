@@ -1,7 +1,7 @@
 #-------------------------------------------------
 #
 # Project created by QtCreator 2016-08-02T20:17:23
-#
+#s
 #-------------------------------------------------
 
 QT       += core gui testlib network
@@ -43,7 +43,8 @@ SOURCES += main.cpp\
     results/QLineEditResult.cpp \
     events/WaitRequestCSS.cpp \
     selectors/CSSChainedSelector.cpp \
-    selectors/ValidatorProperty.cpp
+    selectors/ValidatorProperty.cpp \
+    DeleteOnHideFilter.cpp
 
 HEADERS  += MainWindow.h \
     TestingModule.h \
@@ -75,6 +76,7 @@ HEADERS  += MainWindow.h \
     results/QLineEditResult.h \
     events/WaitRequestCSS.h \
     selectors/CSSChainedSelector.h \
-    selectors/ValidatorProperty.h
+    selectors/ValidatorProperty.h \
+    DeleteOnHideFilter.h
 
 FORMS    += MainWindow.ui

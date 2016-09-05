@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 {
     //run_test();
     if(should_run_test()) {
-        QLIST_craziness();
+        run_test();
         return 0;
     }
     QApplication a(argc, argv);

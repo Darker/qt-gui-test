@@ -1,4 +1,5 @@
 #include "ValidatorProperty.h"
+#include <cstring>
 
 ValidatorProperty::ValidatorProperty() : Validator(), acceptsAllValues(false)
 {
@@ -6,14 +7,21 @@ ValidatorProperty::ValidatorProperty() : Validator(), acceptsAllValues(false)
 }
 
 
-bool ValidatorProperty::validate(QObject* object, TestingModule* m) const
+bool ValidatorProperty::validate(QObject*o, TestingModule*) const
 {
+    const QVariant prop = o->property(propertyName_.c_str());
+    if(prop.isValid()) {
+        if(acceptsAllValues)
+            return true;
+        else
+            return prop == value_;
+
+    }
     return false;
 }
 
 QString ValidatorProperty::parse(const QString& source)
 {
-    return source;
     QString name("");
     QString val("");
     // this is false until the opening brace [
@@ -23,16 +31,38 @@ QString ValidatorProperty::parse(const QString& source)
     // this validator will return true just if any value is present
     bool parsingValue = false;
     acceptsAllValues = true;
-
-    for (int i = 1, l = source.length(); i < l; ++i) {
+    // Start with 1 because [ is automatically skipped
+    int i = 1;
+    const int l = source.length();
+    for (; i < l; ++i) {
         QChar cur = source[i];
-        if(cur=='[') {
-            started = true;
+//        if(cur=='[') {
+//            started = true;
+//        }
+//        else
+
+        if(cur==']') {
+            ++i;
+            break;
         }
-        else if(cur==']') {
-            return source.right(l-i);
+        else if(!parsingValue && cur=='=') {
+            parsingValue = true;
+            acceptsAllValues = false;
         }
-        //else if(!parsingValue && )
+        else if(!parsingValue) {
+            name += cur;
+        }
+        else if(parsingValue) {
+            val += cur;
+        }
     }
-    return "";
+    value_ = QVariant::fromValue(val);
+    propertyName_ = name.toStdString();
+
+    return source.right(l-i);
+}
+
+ValidatorProperty::~ValidatorProperty()
+{
+
 }
