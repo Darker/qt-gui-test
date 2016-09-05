@@ -42,7 +42,8 @@ SOURCES += main.cpp\
     results/SearchResultGroup.cpp \
     results/QLineEditResult.cpp \
     events/WaitRequestCSS.cpp \
-    selectors/CSSChainedSelector.cpp
+    selectors/CSSChainedSelector.cpp \
+    selectors/ValidatorProperty.cpp
 
 HEADERS  += MainWindow.h \
     TestingModule.h \
@@ -73,6 +74,7 @@ HEADERS  += MainWindow.h \
     results/SearchResultGroup.h \
     results/QLineEditResult.h \
     events/WaitRequestCSS.h \
-    selectors/CSSChainedSelector.h
+    selectors/CSSChainedSelector.h \
+    selectors/ValidatorProperty.h
 
 FORMS    += MainWindow.ui
