@@ -33,6 +33,10 @@ class SearchResult : public QObject
             private:
                 static QMap<QString, std::shared_ptr<SearchResult::Factory>>* getMap();
                 static QReadWriteLock* getLock();
+                // There is a cache that remembers which objects did resolve to which factories
+                static QMap<QString, std::shared_ptr<SearchResult::Factory>>* getCache();
+                // Returns basic factory for qobjects, which is instance of this class
+                static std::shared_ptr<SearchResult::Factory> qobjectFactory;
         };
         template <class T_SearchResultSubclass, class T_QObjectSubclass>
         class FactorySimple: public Factory {
@@ -44,6 +48,15 @@ class SearchResult : public QObject
             virtual QString objectName() const override {
                 return T_QObjectSubclass::staticMetaObject.className();
             }
+        };
+
+        class QObjectFactory: public Factory {
+        public:
+            virtual SearchResultPtr newInstance(QObject* o, TestingModule* m) const override {
+                return std::make_shared<SearchResult>(o, m);
+            }
+            virtual QString objectName() const override {return "QObject";}
+            static QObjectFactory* instance();
         };
 
     signals:

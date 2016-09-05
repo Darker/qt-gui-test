@@ -12,6 +12,7 @@ public:
   virtual QObjectList find(QObject* parent, bool returnFirst, QObjectList& targetList) override;
   virtual bool satisfies(QObject* object, TestingModule* module) const override;
   virtual QString parse(const QString&) override;
+  virtual std::shared_ptr<Selector> optimize(std::shared_ptr<Selector> target) const override;
 protected:
   QList<CssSelectorPtr> chain_;
   virtual QObjectList find(QObject* parent, bool returnFirst, QObjectList& targetList, const int currentSelector);

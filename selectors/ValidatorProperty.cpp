@@ -8,10 +8,13 @@ ValidatorProperty::ValidatorProperty() : Validator(), acceptsAllValues(false)
 
 bool ValidatorProperty::validate(QObject* object, TestingModule* m) const
 {
+    return false;
 }
 
 QString ValidatorProperty::parse(const QString& source)
 {
+    return source;
+    QString name("");
     QString val("");
     // this is false until the opening brace [
     bool started = false;
@@ -29,7 +32,7 @@ QString ValidatorProperty::parse(const QString& source)
         else if(cur==']') {
             return source.right(l-i);
         }
-        else
+        //else if(!parsingValue && )
     }
     return "";
 }

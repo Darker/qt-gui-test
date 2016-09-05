@@ -107,29 +107,53 @@ void SearchResult::sendMouseEvent(QEvent::Type t, const int x, const int y, Qt::
         Qt::NoModifier);
     sendEvent(eve);
 }
-
+std::shared_ptr<SearchResult::Factory> SearchResult::Factory::qobjectFactory = nullptr;
 std::shared_ptr<SearchResult> SearchResult::Factory::fromObject(QObject* widget, TestingModule* module, bool ignoreUnimplemented)
 {
     std::shared_ptr<SearchResult> returnValue = nullptr;
+    std::shared_ptr<SearchResult::Factory> constructor(nullptr);
+
+    // Access the class meta info
+    const QMetaObject* meta = widget->metaObject();
+
     if(widget != nullptr) {
-        QReadLocker lock(getLock());
-        QMap<QString, std::shared_ptr<SearchResult::Factory>>* map = getMap();
-        // Try to find factory
-        const QMetaObject* meta = widget->metaObject();
         QString className = meta->className();
-        while( className != "QObject" && returnValue == nullptr )
-        {
-            QMap<QString, std::shared_ptr<SearchResult::Factory>>::const_iterator factoryLocation = map->constFind(className);
-            if(factoryLocation != map->constEnd()) {
-                returnValue = (*factoryLocation)->newInstance( widget, module );
-                break;
+        // First try to find constructor in cache, it's faster
+        QMap<QString, std::shared_ptr<SearchResult::Factory>>* cache = getCache();
+        const auto it = cache->constFind(className);
+        if( it != cache->constEnd()) {
+            constructor = *it;
+        }
+        // Resolve ctor if not cached
+        if(constructor == nullptr) {
+            QReadLocker lock(getLock());
+            QMap<QString, std::shared_ptr<SearchResult::Factory>>* map = getMap();
+
+            while( className != "QObject" && returnValue == nullptr )
+            {
+                QMap<QString, std::shared_ptr<SearchResult::Factory>>::const_iterator factoryLocation = map->constFind(className);
+                if(factoryLocation != map->constEnd()) {
+                    constructor = *factoryLocation;
+                    cache->insert(className, constructor);
+                    break;
+                }
+                meta = meta->superClass();
+                className = meta->className();
             }
-            meta = meta->superClass();
-            className = meta->className();
         }
     }
-    if(returnValue == nullptr && !ignoreUnimplemented ) {
-        returnValue = std::make_shared<SearchResult>(widget, module);
+    if(constructor != nullptr) {
+        returnValue = constructor->newInstance( widget, module );
+    }
+    else {
+        if(!ignoreUnimplemented)
+            returnValue = std::make_shared<SearchResult>(widget, module);
+        QMap<QString, std::shared_ptr<SearchResult::Factory>>* cache = getCache();
+        QString className = meta->className();
+        if(qobjectFactory == nullptr) {
+            qobjectFactory = std::shared_ptr<SearchResult::Factory>(new SearchResult::QObjectFactory);
+        }
+        cache->insert(className, qobjectFactory);
     }
     return returnValue;
 }
@@ -152,4 +176,16 @@ QReadWriteLock* SearchResult::Factory::getLock()
 {
     static QReadWriteLock lock;
     return &lock;
+}
+
+QMap<QString, std::shared_ptr<SearchResult::Factory> >*SearchResult::Factory::getCache()
+{
+    static QMap<QString, std::shared_ptr<SearchResult::Factory>> map;
+    return &map;
+}
+
+SearchResult::QObjectFactory* SearchResult::QObjectFactory::instance()
+{
+    static SearchResult::QObjectFactory factory;
+    return &factory;
 }

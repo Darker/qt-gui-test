@@ -100,4 +100,19 @@ QString CSSChainedSelector::parse(const QString& source)
     return str;
 }
 
+std::shared_ptr<Selector> CSSChainedSelector::optimize(std::shared_ptr<Selector> target) const
+{
+    if(target.get() != this)
+        return target;
+    std::shared_ptr<CSSChainedSelector> self = std::dynamic_pointer_cast<CSSChainedSelector>(target);
+    if(self) {
+        if(chain_.length() == 1) {
+            return chain_[0]->optimize(chain_[0]);
+        }
+    }
+    else
+        return target;
+    return target;
+}
+
 

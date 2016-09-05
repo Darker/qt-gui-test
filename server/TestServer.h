@@ -3,13 +3,14 @@
 
 #include <QObject>
 #include <QTcpServer>
+#include <QHostAddress>
 #include "SmartSocket.h"
 
 class TestServer : public QObject
 {
         Q_OBJECT
     public:
-        explicit TestServer(QObject *parent = 0);
+        explicit TestServer(const quint16 port=9666, const QHostAddress addr = QHostAddress::Any, QObject *parent = 0);
 
     signals:
         void command(const QString& command, const QString& params);

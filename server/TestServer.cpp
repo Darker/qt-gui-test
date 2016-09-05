@@ -1,7 +1,9 @@
 #include "TestServer.h"
 #include <QTcpSocket>
 
-TestServer::TestServer(QObject *parent) : QObject(parent)
+
+TestServer::TestServer(const quint16 port, const QHostAddress addr, QObject* parent)
+  : QObject(parent)
   , client_id(0)
 {
     server = new QTcpServer(this);
@@ -9,7 +11,7 @@ TestServer::TestServer(QObject *parent) : QObject(parent)
     // whenever a user connects, it will emit signal
     connect(server, &QTcpServer::newConnection, this, &TestServer::newConnection);
 
-    if(!server->listen(QHostAddress::Any, 9666))
+    if(!server->listen(addr, port))
     {
         qDebug() << "Server could not start";
     }
@@ -18,6 +20,7 @@ TestServer::TestServer(QObject *parent) : QObject(parent)
         qDebug() << "Server started!";
     }
 }
+
 void TestServer::newConnection()
 {
     // need to grab the socket

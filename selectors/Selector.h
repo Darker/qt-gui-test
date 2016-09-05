@@ -14,6 +14,9 @@ class Selector
         virtual QObject* findOne(QObject* parent);
         virtual bool satisfies(QObject* object, TestingModule* module) const = 0;
         virtual bool satisfies(QObject* object) const {return satisfies(object, nullptr);}
+        virtual std::shared_ptr<Selector> optimize(std::shared_ptr<Selector> target) const {
+            return target;
+        }
         /** Parses input and returns remaining data for sub-selectors **/
         virtual QString parse(const QString&) = 0;
 

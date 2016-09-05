@@ -124,6 +124,7 @@ void TestingModule::command(const QString& command, const QString& paramstr)
     SelectorPtr selector(new CSSChainedSelector);
     try {
         selector->parse(selectorStr);
+        selector = selector->optimize(selector);
     }
     catch(const std::runtime_error& e) {
         emit message(QString("ERROR when parsing selector: %1").arg(e.what()));

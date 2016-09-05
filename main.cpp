@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     mod.start();
     mod.startListening();
     // Start threaded server
-    TestServer pokus;
+    TestServer pokus(6660);
     QObject::connect(&pokus, &TestServer::command, &mod, &TestingModule::command);
     //QObject::connect(&pokus, SIGNAL(command(const QString&,const QString&)),
     //                 &mod, SLOT(command(const QString&,const QString&)), Qt::QueuedConnection);
