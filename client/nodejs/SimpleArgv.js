@@ -41,10 +41,11 @@ Arguments.prototype.parse = function () {
             defined_already = true;
         }
         args[name] = value;
-        if (!defined_already) {
+        if (!defined_already && !this.hasOwnProperty("arg_" + name)) {
             //Object.defineProperty(args, name, {
             //    get: getterForName(internal_name)
             //});
+            
             Object.defineProperty(this, "arg_" + name, {
                 get: getterForNameArgs(name)
             });
@@ -52,7 +53,7 @@ Arguments.prototype.parse = function () {
     }
 }
 Arguments.prototype.addGetterFor = function (name) {
-    if (!this.hasOwnProperty(name)) {
+    if (!this.hasOwnProperty("arg_" + name)) {
         Object.defineProperty(this, "arg_" + name, {
             get: getterForNameArgs(name)
         });

@@ -9,4 +9,4 @@ var commands = new Command.List([
     new Command.Simple("submit::die!")
 ]);
 
-require("./BasicTest.js")("9666", "127.0.0.1", commands);
+require("./BasicTest.js")("6660", "127.0.0.1", commands);

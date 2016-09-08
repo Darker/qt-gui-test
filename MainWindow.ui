@@ -76,7 +76,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Show dialog</string>
+     <string>Pičo vokno</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_3">
