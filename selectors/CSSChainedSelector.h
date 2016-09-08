@@ -15,7 +15,7 @@ public:
   virtual std::shared_ptr<Selector> optimize(std::shared_ptr<Selector> target) const override;
 protected:
   QList<CssSelectorPtr> chain_;
-  virtual QObjectList find(QObject* parent, bool returnFirst, QObjectList& targetList, const int currentSelector);
+  virtual QObjectList find(QObject* parent, bool returnFirst, QObjectList& targetList, const QList<int>& activeSelectors);
 };
 
 #endif // CSSCHAINEDSELECTOR_H

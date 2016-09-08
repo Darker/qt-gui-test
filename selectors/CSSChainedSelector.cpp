@@ -10,52 +10,46 @@ CSSChainedSelector::CSSChainedSelector()
 **/
 QObjectList CSSChainedSelector::find(QObject* parent, bool returnFirst, QObjectList& targetList)
 {
-    return find(parent, returnFirst, targetList, 0);
+    QList<int> base;
+    base<<0;
+    return find(parent, returnFirst, targetList, base);
 }
 
-QObjectList CSSChainedSelector::find(QObject* parent, bool returnFirst, QObjectList& targetList, const int currentSelector)
+QObjectList CSSChainedSelector::find(QObject* parent, bool returnFirst, QObjectList& targetList, const QList<int>& activeSelectors)
 {
-    if(currentSelector>=chain_.size())
-        return targetList;
-    SelectorPtr selector = chain_[currentSelector];
-    //SelectorPtr firstSelector = chain_[0];
-
     const QObjectList& children = parent->children();
     Q_FOREACH(QObject* child, children) {
-        bool mustInspect = true;
-        // If current nth selector works for child
-        if(selector->satisfies(child)) {
-            // If there are MORE selectors to check on child's children
-            if(currentSelector+1<chain_.size()) {
-                find(child, returnFirst, targetList, currentSelector+1);
-                mustInspect = false;
-                if(returnFirst && targetList.size()>0) {
-                    return targetList;
+        QList<int> childSelectors(activeSelectors);
+        //childSelectors<<0;
+        Q_FOREACH(const int selectorIndex, activeSelectors) {
+            if(selectorIndex>=chain_.length())
+                throw std::runtime_error("Wtf man, selector index ain't in range.");
+            SelectorPtr selector = chain_[selectorIndex];
+            if(selector == nullptr)
+                throw std::runtime_error("Ain't nobody got time for null selector.");
+            // If current nth selector works for child
+            if(selector->satisfies(child)) {
+                // If there are MORE selectors to check on child's children
+                if(selectorIndex+1<chain_.size()) {
+                    const int nextIndex = selectorIndex+1;
+                    if(childSelectors.indexOf(nextIndex)<0)
+                        childSelectors.append(nextIndex);
                 }
-            }
-            //
-            else {
-                if(!targetList.contains(child)) {
-                    targetList.append(child);
-                    if(returnFirst) {
-                        return targetList;
+                // This is the final step of the chain, the selector was applied
+                else {
+                    if(!targetList.contains(child)) {
+                        targetList.append(child);
+                        if(returnFirst) {
+                            return targetList;
+                        }
                     }
                 }
             }
         }
-        // Selectors didn't apply recursion but it's still worth to check children
-        if(mustInspect && child->children().length()>0) {
-            // Double recursion because I suck
-            find(child, returnFirst, targetList, currentSelector);
-            if(returnFirst && targetList.size()>0) {
-                return targetList;
-            }
-            find(child, returnFirst, targetList, 0);
-            if(returnFirst && targetList.size()>0) {
-                return targetList;
-            }
+        find(child, returnFirst, targetList, childSelectors);
+        if(returnFirst && targetList.size()>0) {
+            return targetList;
         }
-
     }
     return targetList;
 }
