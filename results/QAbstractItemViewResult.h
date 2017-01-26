@@ -9,6 +9,8 @@ class QAbstractItemViewResult : public WidgetResult
         QAbstractItemViewResult(QAbstractItemView*, TestingModule*);
     public slots:
         virtual void doubleClickItem(const QString&) override;
+        // Will select all items that contain any of the strings
+        // given by 1st argument
         virtual void selectItems(const QStringList&) override;
     protected:
         QAbstractItemView* targetView_;

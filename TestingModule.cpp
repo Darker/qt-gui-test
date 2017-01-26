@@ -161,6 +161,15 @@ void TestingModule::command(const QString& command, const QString& paramstr)
         else if (command=="dblclickitem" && params.length()>=2) {
             res->doubleClickItem(params[1]);
         }
+        else if (command=="selectitems" && params.length()>=2) {
+            QString delimiter = ",";
+            const QString targets(params[1]);
+            // If two params given, then delimiter is second
+            if(params.length()>=3) {
+                delimiter = params[2];
+            }
+            res->selectItems(targets.split(delimiter));
+        }
         else if (command=="select" && params.length()>=2) {
             res->selectItems(params.mid(2));
         }

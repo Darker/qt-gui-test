@@ -38,7 +38,6 @@ QAbstractItemViewResult::QAbstractItemViewResult(QAbstractItemView*i, TestingMod
 {
 
 }
-
 void QAbstractItemViewResult::doubleClickItem(const QString& name)
 {
     QModelIndex index(findIndexByString(targetView_, name));
@@ -47,17 +46,27 @@ void QAbstractItemViewResult::doubleClickItem(const QString& name)
         targetView_->doubleClicked(index);
     }
 }
-
-
-
-
 void QAbstractItemViewResult::selectItems(const QStringList& list)
 {
     if(list.size() > 0) {
-        QModelIndex index(findIndexByString(targetView_, list[0]));
-        //QString indexData = index.data().toString();
-        if(index.isValid()) {
-            targetView_->clicked(index);
+        // first item clears the selection and is added
+        // all following items are added
+        QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::ClearAndSelect;
+
+        QItemSelection selection;
+        Q_FOREACH(const QString text, list) {
+            QModelIndex index(findIndexByString(targetView_, list[0]));
+            //QItemSelection selection;
+            //selection.
+            //QString indexData = index.data().toString();
+            if(index.isValid()) {
+                //targetView_->clicked(index);
+                //targetView_->selectionModel()->select(index, flags);
+                selection.select(index, index);
+            }
+            // No longer clear following items
+            //flags = flags&(~QItemSelectionModel::Clear);
         }
+        targetView_->selectionModel()->select(selection, flags);
     }
 }
