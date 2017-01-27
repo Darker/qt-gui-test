@@ -11,7 +11,14 @@ DialogResult::DialogResult(QDialog* dialog, TestingModule* module) :
 void DialogResult::submit()
 {
     //targetDialog_->accept();
-    targetDialog_->done(QDialog::Accepted);
+    //targetDialog_->done(QDialog::Accepted);
+    if(!targetDialog_.isNull()) {
+        QMetaObject::invokeMethod( targetDialog_.data(),
+                                   "done",//&QDialog::done,//
+                                   Qt::QueuedConnection,
+                                   Q_ARG( int, QDialog::Accepted )
+        );
+    }
 }
 
 

@@ -11,11 +11,12 @@ class QActionResult : public SearchResult
     public:
         QActionResult(QAction* target, TestingModule* parent);
 
-
-        // SearchResult interface
+    signals:
+        void triggerWorkaround();
     public slots:
         virtual void click() override;
         virtual void submit() override;
+        virtual void asyncTrigger();
     protected:
         QPointer<QAction> targetAction_;
 };

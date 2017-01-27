@@ -148,6 +148,9 @@
     <property name="contextMenuPolicy">
      <enum>Qt::CustomContextMenu</enum>
     </property>
+    <property name="selectionBehavior">
+     <enum>QAbstractItemView::SelectRows</enum>
+    </property>
     <row>
      <property name="text">
       <string>A</string>

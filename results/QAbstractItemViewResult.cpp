@@ -52,17 +52,43 @@ void QAbstractItemViewResult::selectItems(const QStringList& list)
         // first item clears the selection and is added
         // all following items are added
         QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::ClearAndSelect;
-
+        const QAbstractItemView::SelectionBehavior behavior = targetView_->selectionBehavior();
         QItemSelection selection;
-        Q_FOREACH(const QString text, list) {
-            QModelIndex index(findIndexByString(targetView_, list[0]));
+        Q_FOREACH(const QString& text, list) {
+            const QModelIndex index(findIndexByString(targetView_, text));
             //QItemSelection selection;
             //selection.
             //QString indexData = index.data().toString();
             if(index.isValid()) {
-                //targetView_->clicked(index);
-                //targetView_->selectionModel()->select(index, flags);
-                selection.select(index, index);
+                // If whole rows are to be selected, expand the item to view width
+                if(behavior == QAbstractItemView::SelectRows) {
+                    QModelIndex begin, end, tmp;
+                    begin = end = index;
+                    // find first sibling in the same row that is valid
+                    while((tmp=begin.sibling(begin.row(), begin.column()-1)).isValid()) {
+                        begin = tmp;
+                    }
+                    // and now move all the way to last item
+                    while((tmp=end.sibling(end.row(), end.column()+1)).isValid()) {
+                        end = tmp;
+                    }
+                    selection.select(begin, end);
+                }
+                // Same as above but with columns
+                else if(behavior == QAbstractItemView::SelectColumns) {
+                    QModelIndex begin, end, tmp;
+                    begin = end = index;
+                    while((tmp=begin.sibling(begin.row()-1, begin.column())).isValid()) {
+                        begin = tmp;
+                    }
+                    while((tmp=end.sibling(end.row()+1, end.column())).isValid()) {
+                        end = tmp;
+                    }
+                    selection.select(begin, end);
+                }
+                else {
+                    selection.select(index, index);
+                }
             }
             // No longer clear following items
             //flags = flags&(~QItemSelectionModel::Clear);

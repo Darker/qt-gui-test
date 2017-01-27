@@ -8,6 +8,11 @@ function connectForever(port, ip, commands) {
     //var getCommands = commands.getCommands();
 
     var client = connect.connect(port, ip);
+    var old_write = client.write;
+    client.write = function(data) {
+        console.log("SENT: "+data.replace("\n", "\\n"));
+        old_write.apply(client, arguments);
+    }
 
     client.on('data', function (data) {
         console.log('RECEIVED: ' + data);

@@ -8,12 +8,19 @@ QActionResult::QActionResult(QAction* target, TestingModule* parent) :
 
 void QActionResult::click()
 {
-    if(!targetAction_.isNull())
-        targetAction_->trigger();
+    asyncTrigger();
 }
 
 void QActionResult::submit()
 {
-    if(!targetAction_.isNull())
-        targetAction_->trigger();
+    asyncTrigger();
+}
+
+void QActionResult::asyncTrigger()
+{
+    if(!targetAction_.isNull()) {
+        QObject::connect(this, &QActionResult::triggerWorkaround, targetAction_.data(), &QAction::trigger, Qt::QueuedConnection);
+        emit triggerWorkaround();
+        QObject::disconnect(this, nullptr, targetAction_.data(), nullptr);
+    }
 }

@@ -1,13 +1,6 @@
 #include "ValidatorClassName.h"
 #include <QObject>
 
-//ValidatorClassName::ValidatorClassName(const QString& name) :
-//    Validator()
-//  , className_(name)
-//{
-
-//}
-
 bool ValidatorClassName::validate(QObject* object, TestingModule*) const
 {
     const QMetaObject* meta = object->metaObject();
@@ -24,12 +17,14 @@ QString ValidatorClassName::parse(const QString& source)
     className_ = "";
     for (int i = 0, l = source.length(); i < l; ++i) {
         QChar cur = source[i];
-        if(cur.isLetterOrNumber() || cur=='_') {
+        if(cur.isLetterOrNumber() || cur=='_' || cur=='.') {
             className_+=cur;
         }
         else {
+            className_ = className_.replace(".", "::");
             return source.right(l-i);
         }
     }
+    className_ = className_.replace(".", "::");
     return "";
 }

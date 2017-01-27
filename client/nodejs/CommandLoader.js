@@ -37,7 +37,8 @@ CommandLoader.prototype.loadCommands = function() {
     return fs.readFilePromise(this.path)
       .then((data) => {
            this.lastUpdate = new Date().getTime();
-           var commands = eval("("+data+")");
+           console.log("(function() {return (\n"+data+"\n);})()");
+           var commands = eval("(function() {return ("+data+");})()");
            if(!(commands instanceof Array))
                throw new error("Provide file with an array of commands!");
            return this.cache = new Command.List(commands);

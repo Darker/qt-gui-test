@@ -61,7 +61,7 @@ void TestServer::lineReceived(SmartSocket* socket, const QString& data)
             l[1] = QString("client_%1_%2").arg(socket->getName()).arg(l[1]);
             params = l.join("::");
         }
-    }
+    }//cc
 
     emit command(cmd, params);
 }

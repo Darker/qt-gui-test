@@ -64,7 +64,7 @@ Command.prototype.clearEvents = function(client, callback, callbackInfo) {
         } 
         this.activeEvents[i][0].removeListener(this.activeEvents[i][1], this.activeEvents[i][2]);                                                                           
     }
-    console.log("All listeners removed.");
+    //console.log("All listeners removed.");
     this.activeEvents.length = 0;
     // Calling the underlying callback
     if(typeof callback=="function") {
@@ -158,8 +158,8 @@ WaitFor.prototype.resolver = function (resolve, reject, client) {
     catch (error) {
         reject(error);
     }
-    if(this.commandAfter) {
-        console.log("After wait: "+this.commandAfter);
+    if(this.commandAfter instanceof Command) {
+        console.log("During wait: "+this.commandAfter);
         this.commandAfter.executeIgnore(client);
     }
 }
