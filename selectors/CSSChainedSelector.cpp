@@ -54,9 +54,9 @@ QObjectList CSSChainedSelector::find(QObject* parent, bool returnFirst, QObjectL
     return targetList;
 }
 /** Iterate from bottomost selector. Every time, try to apply current selection
- * on object or it's parent or it's parent etc. If we exhaust all parents it doesn't satisfy.
+ * on object or it's parent or it's parent etc. If we exhaust all parents, it doesn't satisfy.
  * If we still have parents and we exhaust selectors, it satisfies them
- * The given object mus ALWAYS satisfy the last selector.
+ * The given object must ALWAYS satisfy the last selector.
 **/
 bool CSSChainedSelector::satisfies(QObject* object, TestingModule* module) const
 {
