@@ -13,12 +13,15 @@ class TestServer : public QObject
         explicit TestServer(const quint16 port=9666, const QHostAddress addr = QHostAddress::Any, QObject *parent = 0);
 
     signals:
-        void command(const QString& command, const QString& params);
+        void command(const QString& command, const QString& params, const QString& transactionId);
     public slots:
         void newConnection();
         void lineReceived(SmartSocket* socket, const QString& data);
         void disconnected(SmartSocket* socket);
         //void messageForClient(const int clientId, const QString message);
+        void message(const QString message, const QString transactionId);
+        // Converts QVariant to JSON
+        void message(const QVariant message, const QString transactionId);
         void message(const QString message);
     protected:
         QList<SmartSocket*> sockets;

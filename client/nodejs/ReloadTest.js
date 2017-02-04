@@ -24,7 +24,7 @@ function connectForever(port, ip, commands) {
                   console.log("All commands done!");
               })
               .catch(function (error) {
-                  console.log("Error while executing commands: " + error);
+                  console.log("Error while executing commands: " + error+"\n",error.stack);
               })
         });
     }).on('end', function () {

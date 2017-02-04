@@ -77,12 +77,12 @@ bool TestingModule::event(QEvent*e)
             if(chev->mode == ChildEvent::ADD) {
                 if(!chev->valid())
                     return true;
-                const QString childClassName =  chev->child()->metaObject()->className();
-                const QString parentClassName = chev->parent()->metaObject()->className();
-                qDebug()<<"Add"
-                        <<childClassName
-                        <<"to"
-                        <<parentClassName;
+                //const QString childClassName =  chev->child()->metaObject()->className();
+                //const QString parentClassName = chev->parent()->metaObject()->className();
+                //qDebug()<<"Add"
+                //        <<childClassName
+                //        <<"to"
+                //        <<parentClassName;
                 // Check out events
                 for(int i=0,l=requests.length(); i<l; i++) {
                 //for(WaitRequestPtr req: requests) {
@@ -110,7 +110,7 @@ void TestingModule::start()
 #include "selectors/Selector.h"
 #include "selectors/CSSChainedSelector.h"
 #include "results/SearchResultGroup.h"
-void TestingModule::command(const QString& command, const QString& paramstr)
+void TestingModule::command(const QString& command, const QString& paramstr, const QString& transactionId)
 {
     QStringList params = paramstr.split("::");
     if(params.length()==0)
@@ -119,8 +119,10 @@ void TestingModule::command(const QString& command, const QString& paramstr)
     QObjectList results = QObjectList();
     const QString selectorStr = params[0];
     bool findOneOnly = false;
-    if(command == "wait" || command=="coords")
-      findOneOnly = true;
+    // Some commands are known to operate over single item
+    // for those, selector only searches for first item to save CPU
+    if(command == "wait" || command=="coords" || command=="gettext")
+        findOneOnly = true;
     SelectorPtr selector(new CSSChainedSelector);
     try {
         selector->parse(selectorStr);
@@ -175,24 +177,24 @@ void TestingModule::command(const QString& command, const QString& paramstr)
         }
         else if(command=="coords") {
             const QPoint loc(res->getMidpoint());
-            QString replyID("coords");
-            if(params.length()>=2) {
-                replyID = params[1];
-            }
-            emit message(QString("%1 %2 %3").arg(replyID).arg(loc.x()).arg(loc.y()));
+            emit message(QString("[%1,%2]").arg(loc.x()).arg(loc.y()), transactionId);
+        }
+        else if(command=="gettext") {
+            emit message(res->getGUIText(), transactionId);
         }
     }
-    if (command=="wait" && params.length()>=2 && params[1].length()>0) {
+    if (command=="wait") {
         if(res == nullptr) {
-            WaitRequestPtr req(new WaitRequestCSS(selector, params[1]));
+            WaitRequestPtr req(new WaitRequestCSS(selector, transactionId));
             requests.push_back(req);
         }
         else {
-            emit message(params[1]);
+            emit message("", transactionId);
         }
     }
     else if(command=="count") {
-        emit message(QString("Element %1 occurs %2 times.").arg(selectorStr).arg(results.size()));
+        //emit message(QString("Element %1 occurs %2 times.").arg(selectorStr).arg(results.size()), transactionId);
+        emit message(QString("%1").arg(results.size()), transactionId);
     }
 }
 

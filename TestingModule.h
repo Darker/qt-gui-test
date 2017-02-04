@@ -30,13 +30,14 @@ class TestingModule: public QObject
         virtual bool event(QEvent*) override;
     public slots:
         void start();
-        void command(const QString& name, const QString& paramstr);
+        void command(const QString& name, const QString& paramstr, const QString& transactionId="");
         // Starts listening on ALL changes in QApplication
         void startListening();
     // Signals that can be delegated over to the listener
     signals:
         void t_event(const TestingEvent&);
         void message(const QString msg);
+        void message(const QString msg, const QString transactionId);
     protected:
         QPointer<QApplication> app_;
         SearchResultPtr byText(QObject* obj, const QString&);

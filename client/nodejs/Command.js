@@ -11,6 +11,14 @@ function Command(client) {
     // Array of callback to cancel/cleanup whatever this command
     // created.
 }
+(()=>{
+    let ID = 0;
+    Object.defineProperty(Command, "MESSAGE_ID", {
+        get: function() {return ++ID;},
+        enumerable: false,
+        configurable: false
+    });
+})();
 Command.prototype.execute = function (client) {
     if (client == null)
         client = this.client;
@@ -35,6 +43,45 @@ Command.prototype.execute = function (client) {
         this.resolver.apply(this, args);
     });
 }
+/**
+ * Sends a message and waits for reply from the server. 
+ * resolves with string reply, rejects on error or timeout.
+**/
+Command.prototype.messageWithReply = function(message, client, timeout) {
+    return new Promise((resolve, reject)=>{
+        var id = Command.MESSAGE_ID;
+        var timeoutId = 0;
+        var timedOut = false;
+        this.event(client, 'data', (data) => {
+            if(timedOut) {
+                console.error("Warning: received event after timed out, this means event listener wasn't removed properly.");
+                return;
+            }
+            data = data + "";
+           
+            // there is a comma at the end of the transaction ID
+            var idFragment = data.substr(0, data.indexOf(","));
+            var number = parseInt(idFragment, 10);
+            if (number == id)  {
+                data = data.substr(data.indexOf(",")+1);
+                while(data.endsWith("\n") || data.endsWith("\r"))
+                    data = data.substr(0, data.length-1);
+                console.log("Resolving with: ",data);
+                resolve(data);
+            } 
+        });
+        try {
+            client.write(id+","+message+"\n");
+        }
+        catch (error) {
+            reject(error);
+        }
+        if(typeof timeout=="number" && timeout>0) {
+            timeoutId = setTimeout(()=>{timedOut=true; reject(new Error("timeout"))}, timeout);
+        }
+    });
+}
+
 /**
  * Adds event listener which is guaranteed to be removed before the
  * command resolves or rejects 
@@ -144,16 +191,17 @@ function WaitFor(selector, client) {
 WaitFor.prototype = Object.create(Command.prototype);
 Command.WaitFor = WaitFor;
 WaitFor.prototype.resolver = function (resolve, reject, client) {
-    //console.log("WAIT FOR: " + this.selector);
-    var id = WaitFor.ID++;
+    var id = Command.MESSAGE_ID;
     this.event(client, 'data', (data) => {
         data = data + "";
+        // there is a comma at the end of the transaction ID
+        data = data.substr(0, data.indexOf(","));
         var number = parseInt(data, 10);
         if (number == id)
             resolve();
     });
     try {
-        client.write("wait::" + this.selector + "::" + id + "\n");
+        client.write(id+",wait::" + this.selector + "\n");
     }
     catch (error) {
         reject(error);
@@ -203,6 +251,74 @@ CommandList.prototype.resolver = function (resolve, reject, client) {
 }
 CommandList.prototype.toString = function() {
     return "Commands: "+this.commands.map((a)=>{return x.constructor.name;}).join(", ");
+}
+/**
+/* Takes two lists of commands, a single command and a value.
+ * if given commands return value equals given value, executes "true commands", else executes "false commands"                                                        
+**/
+function CommandIfEquals(command, value, iftrue, iffalse) {
+    this.command = command;
+    this.refValue = value;
+    this.truecommands = iftrue instanceof Array?iftrue:[];
+    this.falsecommands = iffalse instanceof Array?iffalse:[];
+    Command.call(this);
+}
+CommandIfEquals.prototype = Object.create(Command.prototype);
+Command.IfEquals = CommandIfEquals;
+CommandIfEquals.prototype.truecommands = null;
+CommandIfEquals.prototype.falsecommands = null;
+CommandIfEquals.prototype.resolver = function (resolve, reject, client) {
+    this.messageWithReply(this.command, client)
+      .then((value)=>{
+          var commands;
+          //console.log("<"+value+">");
+          console.log(value+" == "+this.refValue+" => "+(value==this.refValue));
+          if(value==this.refValue) {
+              commands = this.truecommands;
+          }
+          else {
+              commands = this.falsecommands;
+          }
+          console.log(commands);
+          new CommandList(commands, client).execute(client)
+              .then(function(value) {
+                   resolve();
+              })
+              .catch(function(error) {
+                   reject(error);
+              });
+      })
+      .catch(function(error) {
+           reject(error);
+      });
+}
+CommandIfEquals.prototype.toString = function() {
+    return "if ("+this.command+") == \""+this.refValue+"\"";
+}
+CommandIfEquals.prototype.then = function(commands) {
+    if(commands instanceof Command)
+        this.truecommands.push(commands);
+    else if(commands instanceof Array) {
+        this.truecommands.push.apply(this.truecommands, commands);
+    }
+}
+CommandIfEquals.prototype.else = function(commands) {
+    if(commands instanceof Command)
+        this.falsecommands.push(commands);
+    else if(commands instanceof Array) {
+        this.falsecommands.push.apply(this.truecommands, commands);
+    }
+}
+// Non-server commands
+function CommandPrint(message) {
+    Command.call(this);
+    this.message = message;
+}
+CommandPrint.prototype = Object.create(Command.prototype);
+Command.Print = CommandPrint;
+CommandPrint.prototype.resolver = function(resolve, reject) {
+    console.log(this.message);
+    resolve();
 }
 
 module.exports = Command;

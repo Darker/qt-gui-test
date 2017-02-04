@@ -26,6 +26,8 @@ int main(int argc, char *argv[])
 
     QObject::connect(&mod, SIGNAL(message(const QString)),
                      &pokus, SLOT(message(const QString)));
+    QObject::connect(&mod, SIGNAL(message(const QString, const QString)),
+                     &pokus, SLOT(message(const QString, const QString)));
     //QObject::connect(&mod, &TestingModule::message, &pokus, &TestServer::message, Qt::QueuedConnection);
 
 

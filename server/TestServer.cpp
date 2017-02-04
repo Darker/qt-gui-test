@@ -53,17 +53,22 @@ void TestServer::lineReceived(SmartSocket* socket, const QString& data)
         cmd = data.left(index);
         params = data.mid(index+2);
     }
-    // Tmp fix to make reply messages different for each client
-    // otherwise clients receive other client's replies
-    if(cmd == "wait" || cmd=="coords") {
-        QStringList l = params.split("::");
-        if(l.length()>1) {
-            l[1] = QString("client_%1_%2").arg(socket->getName()).arg(l[1]);
-            params = l.join("::");
-        }
-    }//cc
+    // get or generate transaction id
+    QString transactionId = "";
 
-    emit command(cmd, params);
+    int idDelimiter = cmd.indexOf(",");
+    if(idDelimiter!=-1) {
+        transactionId = cmd.left(idDelimiter);
+        cmd = cmd.mid(idDelimiter+1);
+    }
+    else {
+        static uint32_t ID = 0;
+        transactionId = QString("trans_")+QString::number(++ID);
+    }
+    // add client ID to transaction ID
+    transactionId = QString("client_%1_%2").arg(socket->getName()).arg(transactionId);
+
+    emit command(cmd, params, transactionId);
 }
 
 void TestServer::disconnected(SmartSocket* socket)
@@ -76,18 +81,18 @@ void TestServer::disconnected(SmartSocket* socket)
     }*/
 }
 
-void TestServer::message(const QString message)
+void TestServer::message(const QString message, const QString transactionId)
 {
-    bool priv = message.startsWith("client_");
+    bool priv = !transactionId.isEmpty();
     for (int i=0,l=sockets.size(); i<l; i++)
     {
         SmartSocket*const socket = sockets[i];
 
         if(priv) {
             const QString prefix("client_"+socket->getName()+"_");
-            if(message.startsWith(prefix)) {
-                QString realMsg = message.mid(prefix.length());
-                socket->writeln(realMsg);
+            if(transactionId.startsWith(prefix)) {
+                QString realId = transactionId.mid(prefix.length());
+                socket->writeln(realId+","+message);
                 break;
             }
         }
@@ -98,4 +103,31 @@ void TestServer::message(const QString message)
     /*for(SmartSocket* s: sockets) {
         s->writeln(message);
     }*/
+}
+QString qvariant2JSON(const QVariant& data) {
+    QString output("");
+    if(data.canConvert<QVariantList>()) {
+        output+="[";
+        const QVariantList list = data.value<QVariantList>();
+        Q_FOREACH(const QVariant& entry, list) {
+            if(output.length()>1)
+                output+=",";
+            output+=qvariant2JSON(entry);
+        }
+    }
+    else if(data.canConvert<QString>())
+        return '"'+data.toString()+'"';
+    else
+        return "";
+
+}
+
+void TestServer::message(const QVariant message, const QString transactionId)
+{
+    this->message(qvariant2JSON(message), transactionId);
+}
+
+void TestServer::message(const QString message)
+{
+    this->message(message, "");
 }
