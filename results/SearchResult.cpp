@@ -113,10 +113,12 @@ std::shared_ptr<SearchResult> SearchResult::Factory::fromObject(QObject* widget,
     std::shared_ptr<SearchResult> returnValue = nullptr;
     std::shared_ptr<SearchResult::Factory> constructor(nullptr);
 
-    // Access the class meta info
-    const QMetaObject* meta = widget->metaObject();
+
 
     if(widget != nullptr) {
+        // Access the class meta info
+        const QMetaObject* meta = widget->metaObject();
+
         QString className = meta->className();
         // First try to find constructor in cache, it's faster
         QMap<QString, std::shared_ptr<SearchResult::Factory>>* cache = getCache();
@@ -141,20 +143,22 @@ std::shared_ptr<SearchResult> SearchResult::Factory::fromObject(QObject* widget,
                 className = meta->className();
             }
         }
-    }
-    if(constructor != nullptr) {
-        returnValue = constructor->newInstance( widget, module );
-    }
-    else {
-        if(!ignoreUnimplemented)
-            returnValue = std::make_shared<SearchResult>(widget, module);
-        QMap<QString, std::shared_ptr<SearchResult::Factory>>* cache = getCache();
-        QString className = meta->className();
-        if(qobjectFactory == nullptr) {
-            qobjectFactory = std::shared_ptr<SearchResult::Factory>(new SearchResult::QObjectFactory);
+
+        if(constructor != nullptr) {
+            returnValue = constructor->newInstance( widget, module );
         }
-        cache->insert(className, qobjectFactory);
+        else {
+            if(!ignoreUnimplemented)
+                returnValue = std::make_shared<SearchResult>(widget, module);
+            QMap<QString, std::shared_ptr<SearchResult::Factory>>* cache = getCache();
+            QString className = meta->className();
+            if(qobjectFactory == nullptr) {
+                qobjectFactory = std::shared_ptr<SearchResult::Factory>(new SearchResult::QObjectFactory);
+            }
+            cache->insert(className, qobjectFactory);
+        }
     }
+
     return returnValue;
 }
 

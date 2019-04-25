@@ -62,7 +62,7 @@ void TestServer::lineReceived(SmartSocket* socket, const QString& data)
         cmd = cmd.mid(idDelimiter+1);
     }
     else {
-        static uint32_t ID = 0;
+        static unsigned int ID = 0;
         transactionId = QString("trans_")+QString::number(++ID);
     }
     // add client ID to transaction ID

@@ -1,6 +1,6 @@
 #include "TestingModule.h"
 #include "results/SearchResult.h"
-#include "AddChildEventFilter.h"
+#include "ModuleAddChildEventFilter.h"
 #include "events/ChildEvent.h"
 #include "events/WaitRequestCSS.h"
 #include <QDebug>
@@ -88,7 +88,7 @@ bool TestingModule::event(QEvent*e)
                 //for(WaitRequestPtr req: requests) {
                     WaitRequestPtr req(requests[i]);
                     if(req->validate(chev->child(), this)) {
-                        emit message(req->ID);
+                        emit message("", req->ID);
                         requests.removeAt(i);
                         i--;l--;
                     }
@@ -224,7 +224,7 @@ SearchResultPtr TestingModule::byText(QObject* parentObj, const QString& text)
 
 void TestingModule::installEventFilters()
 {
-    app_->installEventFilter(new AddChildEventFilter(this, app_));
+    app_->installEventFilter(new ModuleAddChildEventFilter(this, app_));
     /*for(QWidget* widget: QApplication::allWidgets()) {
         widget->installEventFilter(new AddChildEventFilter(this, widget));
     }*/

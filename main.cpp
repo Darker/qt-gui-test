@@ -6,15 +6,16 @@
 #include "test_css.h"
 int main(int argc, char *argv[])
 {
+
     //run_test();
     if(should_run_test()) {
         run_test();
         return 0;
     }
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
     MainWindow w;
     w.show();
-    TestingModule mod(&a);
+    TestingModule mod(&app);
     register_shit();
     mod.start();
     mod.startListening();
@@ -32,5 +33,5 @@ int main(int argc, char *argv[])
 
 
     //QObject::connect(&w, &MainWindow::clickWidgetRequest, &mod, &TestingModule::clickWidgetByName, Qt::QueuedConnection);
-    return a.exec();
+    return app.exec();
 }

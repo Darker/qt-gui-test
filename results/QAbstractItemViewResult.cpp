@@ -7,13 +7,16 @@ QModelIndex findIndexByString(const QModelIndex& index, const QString& text) {
     // First check this particular index
     if(index.data().toString() == text)
         return index;
-    // Check if it has children and loop
-    const QAbstractItemModel* model = index.model();
-    if(model==nullptr)
-        return QModelIndex();
-    if (!model->hasChildren(index))
-        return QModelIndex();
-    return findIndexByString(model, text, index);
+    // try it without recursion and see
+    return QModelIndex();
+//    // Check if it has children
+//    const QAbstractItemModel* model = index.model();
+//    if(model==nullptr)
+//        return QModelIndex();
+//    if (!model->hasChildren(index))
+//        return QModelIndex();
+//    // If the model has children at this index, loop over all the children
+//    return findIndexByString(model, text, index);
 }
 QModelIndex findIndexByString(const QAbstractItemModel* model, const QString& text,  const QModelIndex& parent) {
     int rows = model->rowCount(parent);

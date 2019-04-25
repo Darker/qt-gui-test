@@ -6,11 +6,13 @@ ValidatorGUIText::ValidatorGUIText()
 
 }
 
-
 bool ValidatorGUIText::validate(QObject* object, TestingModule* m) const
 {
-    SearchResultPtr result = SearchResult::Factory::fromObject(object, m);
-    return result->getGUIText().indexOf(text_)!=-1;
+
+	// TODO: a way to do this without depending on search result
+    //SearchResultPtr result = SearchResult::Factory::fromObject(object, m);
+    //return result->getGUIText().indexOf(text_)!=-1;
+	return false;
 }
 
 QString ValidatorGUIText::parse(const QString& source)

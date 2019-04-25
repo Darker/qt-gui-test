@@ -20,7 +20,7 @@ QObjectList CSSChainedSelector::find(QObject* parent, bool returnFirst, QObjectL
     const QObjectList& children = parent->children();
     Q_FOREACH(QObject* child, children) {
         QList<int> childSelectors(activeSelectors);
-        //childSelectors<<0;
+
         Q_FOREACH(const int selectorIndex, activeSelectors) {
             if(selectorIndex>=chain_.length())
                 throw std::runtime_error("Wtf man, selector index ain't in range.");

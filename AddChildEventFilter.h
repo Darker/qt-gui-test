@@ -2,19 +2,18 @@
 #define ADDCHILDEVENTFILTER_H
 
 #include <QObject>
-#include <QPointer>
-class QEvent;
-class TestingModule;
 
 class AddChildEventFilter : public QObject
 {
-        Q_OBJECT
-    public:
-        explicit AddChildEventFilter(TestingModule* m, QObject *parent = 0);
-        virtual ~AddChildEventFilter();
-    protected:
-        bool eventFilter(QObject *obj, QEvent *event) override;
-        QPointer<TestingModule> mod_;
+    Q_OBJECT
+public:
+    explicit AddChildEventFilter(QObject *parent = 0);
+    virtual ~AddChildEventFilter();
+signals:
+    void childAdded(QObject* child, QObject* parent);
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
+    virtual void reportChildAdded(QObject* child, QObject* parent);
 };
 
 #endif // ADDCHILDEVENTFILTER_H

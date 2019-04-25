@@ -27,7 +27,6 @@ SOURCES += main.cpp\
     results/QActionResult.cpp \
     TestingEvent.cpp \
     results/QAbstractItemViewResult.cpp \
-    AddChildEventFilter.cpp \
     events/ChildEvent.cpp \
     events/WaitRequest.cpp \
     events/WaitRequestGUIText.cpp \
@@ -44,7 +43,10 @@ SOURCES += main.cpp\
     events/WaitRequestCSS.cpp \
     selectors/CSSChainedSelector.cpp \
     selectors/ValidatorProperty.cpp \
-    DeleteOnHideFilter.cpp
+    DeleteOnHideFilter.cpp \
+    ModuleAddChildEventFilter.cpp \
+    AddChildEventFilter.cpp \
+    AddChildEventFilterCSS.cpp
 
 HEADERS  += MainWindow.h \
     TestingModule.h \
@@ -60,7 +62,6 @@ HEADERS  += MainWindow.h \
     results/QActionResult.h \
     TestingEvent.h \
     results/QAbstractItemViewResult.h \
-    AddChildEventFilter.h \
     events/ChildEvent.h \
     events/WaitRequest.h \
     events/WaitRequestGUIText.h \
@@ -77,6 +78,9 @@ HEADERS  += MainWindow.h \
     events/WaitRequestCSS.h \
     selectors/CSSChainedSelector.h \
     selectors/ValidatorProperty.h \
-    DeleteOnHideFilter.h
+    DeleteOnHideFilter.h \
+    ModuleAddChildEventFilter.h \
+    AddChildEventFilter.h \
+    AddChildEventFilterCSS.h
 
 FORMS    += MainWindow.ui
